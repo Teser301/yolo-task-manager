@@ -1,0 +1,33 @@
+.category-list {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.category-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-content h3 {
+  margin: 0;
+  color: #333;
+}
+
+.delete-btn {
+  background-color: #fff;
+  color: #333;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #f0f0f0;
+}

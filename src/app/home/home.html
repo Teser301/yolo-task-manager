@@ -1,0 +1,13 @@
+<div class="category-list">
+    <h2>Categories</h2>
+    @for (category of categories; track category.id) {
+    <div routerLink="/category/{{category.id}}" class="category-card">
+        <div class="category-content">
+            <h3>{{ category.title }}</h3>
+        </div>
+        <button (click)="onDeleteCategory(category.id)" class="delete-btn">
+            Delete
+        </button>
+    </div>
+    }
+</div>
