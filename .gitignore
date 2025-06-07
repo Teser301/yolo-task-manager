@@ -6,7 +6,7 @@
 /out-tsc
 /bazel-out
 venv
-
+__pycache__/
 # Node
 /node_modules
 npm-debug.log
