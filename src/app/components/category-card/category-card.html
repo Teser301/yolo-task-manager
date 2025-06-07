@@ -1,0 +1,9 @@
+<div routerLink="/category/{{category().id}}" class="category-card">
+    <div class="category-content">
+        <h3>{{ category().title }}</h3>
+        <p>{{category().description}}</p>
+    </div>
+    @for (task of category().tasks; track task.id) {
+    <app-task-card [task]="task" [category]="category()" />
+    }
+</div>
