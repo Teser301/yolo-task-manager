@@ -1,0 +1,12 @@
+<h1>Task View</h1>
+@if (task && category) {
+<div class="task-detail">
+    <h1>{{ task.title }}</h1>
+    <p>Status: {{ task.status }}</p>
+    <p>Category: {{ category.title }}</p>
+</div>
+<button (click)="onDeleteTask()">Delete</button>
+<button (click)="returnToCategory()">Back</button>
+} @else {
+<p>Task not found</p>
+}
