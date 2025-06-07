@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { Categories } from '../components/categories/categories';
 import { Category } from '../models/category.model';
 import { CategoryService } from '../services/category';
-import { RouterLink } from '@angular/router';
+import { CategoryCard } from '../components/category-card/category-card';
 
 @Component({
   selector: 'app-home',
-  imports: [Categories, RouterLink],
+  imports: [CategoryCard],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
