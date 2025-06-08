@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Category } from '../models/category.model';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
+  http = inject(HttpClient)
   private categoriesData: Category[] = [
     {
       id: 1,
@@ -33,6 +35,21 @@ export class CategoryService {
     }
   ];
   constructor() { }
+
+
+  createNewCategory(category: any): Observable<any> {
+    const url = `http://localhost:8000/categories`;
+    return this.http.post(url, category, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).pipe(
+      tap({
+        next: (response) => console.log('Creation successful:', response),
+        error: (err) => console.error('Creation failed:', err)
+      })
+    );
+  }
 
   private categoriesSubject = new BehaviorSubject<Category[]>(this.categoriesData);
   categories$ = this.categoriesSubject.asObservable();
@@ -64,4 +81,5 @@ export class CategoryService {
     });
     this.categoriesSubject.next(updatedCategories);
   }
+
 }

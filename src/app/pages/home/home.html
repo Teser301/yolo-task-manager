@@ -1,5 +1,6 @@
 <div class="task-manager">
     <h2 class="title">Task Manager</h2>
+    <button (click)="onCreateCategory()">Create Category</button>
     <div class="category-list">
         @for (category of categories; track category.id) {
         <div class="category-item">

@@ -27,4 +27,20 @@ export class Home {
     }
   }
 
+  onCreateCategory() {
+    const emptyCategory = {
+      title: '',
+      description: '',
+      tasks: []
+    };
+
+    this.categoryService.createNewCategory(emptyCategory).subscribe({
+      next: (response) => {
+        console.log('Category created:', response);
+      },
+      error: (err) => {
+        console.error('Error creating category:', err);
+      }
+    });
+  }
 }

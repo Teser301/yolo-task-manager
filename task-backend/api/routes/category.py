@@ -13,8 +13,8 @@ def create_category(category: CategoryBase, db: Session = Depends(get_db)):
     return crud_category.create_category(db=db, category=category)
 
 @router.get("/", response_model=List[CategoryWithId])
-def read_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud_category.get_categories(db=db, skip=skip, limit=limit)
+def read_categories(db: Session = Depends(get_db)):
+    return crud_category.get_categories(db=db)
 
 @router.get("/{category_id}", response_model=CategoryWithId)
 def read_category(category_id: int, db: Session = Depends(get_db)):
