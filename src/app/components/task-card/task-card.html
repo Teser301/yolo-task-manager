@@ -1,6 +1,4 @@
-<button [routerLink]="['/category', category().id, 'task', task().id]" class="task-card">
-  <div class="rask-content">
-    <h3>{{ task().title }}</h3>
-    <p>Task</p>
-  </div>
-</button>
+<div class="task-card">
+  <h3>{{ task().title }}</h3>
+  <button [routerLink]="['/category', category().id, 'task', task().id]">View Task</button>
+</div>

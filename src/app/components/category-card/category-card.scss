@@ -1,19 +1,65 @@
 .category-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: red;
-}
-.category-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0;
-  h3,
-  p {
-    margin: 0;
-    color: #333;
+  background-color: #374151; // Match dark theme
+  border-radius: 10px;
+  padding: 1.5rem;
+  color: #e5e7eb; // Light text
+  .category-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0 0 0.5rem 0;
+    }
+    p {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #3b82f6;
+      }
+    }
+
+    .delete-btn,
+    .edit-btn {
+      color: white;
+      border: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-left: 0.5rem;
+      cursor: pointer;
+    }
+    .delete-btn {
+      background-color: #dc2626;
+      &:hover {
+        background-color: #ef4444;
+      }
+    }
+    .edit-btn {
+      background-color: #2638dc;
+      &:hover {
+        background-color: #4488ef;
+      }
+    }
+  }
+
+  app-task-card {
+    display: block;
+    margin-top: 1rem;
   }
 }

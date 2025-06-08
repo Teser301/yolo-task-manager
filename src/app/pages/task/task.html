@@ -1,12 +1,17 @@
-<h1>Task View</h1>
-@if (task && category) {
-<div class="task-detail">
-    <h1>{{ task.title }}</h1>
-    <p>Status: {{ task.status }}</p>
-    <p>Category: {{ category.title }}</p>
-</div>
-<button (click)="onDeleteTask()">Delete</button>
-<button (click)="returnToCategory()">Back</button>
-} @else {
-<p>Task not found</p>
-}
+<section class="task-view">
+    <h1 class="task-view-title">Task View</h1>
+
+    @if (task && category) {
+    <div class="task-detail">
+        <h2 class="task-title">{{ task.title }}</h2>
+        <p class="task-meta">Status: <span class="status">{{ task.status }}</span></p>
+        <p class="task-meta">Category: <span class="category-name">{{ category.title }}</span></p>
+        <div class="task-actions">
+            <button class="btn btn-delete" (click)="onDeleteTask()">Delete</button>
+            <button class="btn btn-back" (click)="returnToCategory()">Back</button>
+        </div>
+    </div>
+    } @else {
+    <p class="task-not-found">Task not found</p>
+    }
+</section>

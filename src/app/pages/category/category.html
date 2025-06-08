@@ -1,22 +1,25 @@
-<section>
+<section class="category-view">
     @if (category) {
-    <div>
-        <h1>{{category.title}}</h1>
-        <p>This is the category for everything {{category.title}} related</p>
-        <p>Following tasks assigned to this are:</p>
+    <div class="category-content">
+        <h1 class="category-title">{{category.title}}</h1>
+        <p class="category-description">This is the category for everything {{category.title}} related</p>
+        <p class="category-subtext">Following tasks assigned to this are:</p>
+
         <div class="tasks">
-            <h3>Tasks ({{ category.tasks.length }})</h3>
+            <h3 class="tasks-title">Tasks ({{ category.tasks.length }})</h3>
             @for (task of category.tasks; track task.id) {
             <app-task-card [task]="task" [category]="category" />
             }
         </div>
-        <button (click)="onDeleteCategory(category.id)">Delete</button>
+
+        <button class="btn btn-danger" (click)="onDeleteCategory(category.id)">Delete</button>
     </div>
     } @else {
-    <div>
+    <div class="category-error">
         <h1>Category not found</h1>
         <p>This category could not be found. Please report this</p>
     </div>
     }
-    <button routerLink="/">Return</button>
+
+    <button class="btn btn-secondary" routerLink="/">Return</button>
 </section>

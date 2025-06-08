@@ -1,8 +1,10 @@
-<div class="category-list">
+<div class="task-manager">
     <h2 class="title">Task Manager</h2>
-    @for (category of categories; track category.id) {
-    <div class="category-item">
-        <app-category-card [category]="category" (delete)="onDeleteCategory($event)" />
+    <div class="category-list">
+        @for (category of categories; track category.id) {
+        <div class="category-item">
+            <app-category-card [category]="category" (delete)="onDeleteCategory($event)" />
+        </div>
+        }
     </div>
-    }
 </div>
