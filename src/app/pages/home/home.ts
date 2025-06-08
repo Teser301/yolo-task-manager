@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { Category } from '../models/category.model';
-import { CategoryService } from '../services/category';
-import { CategoryCard } from '../components/category-card/category-card';
+import { Component } from "@angular/core";
+import { CategoryCard } from "../../components/category-card/category-card";
+import { Category } from "../../models/category.model";
+import { CategoryService } from "../../services/category";
+
 
 @Component({
   selector: 'app-home',
@@ -15,13 +16,15 @@ export class Home {
   constructor(private categoryService: CategoryService) { }
 
   ngOnInit(): void {
-    this.categories = this.categoryService.getCategories();
+    this.categoryService.categories$.subscribe((categories) => {
+      this.categories = categories;
+    });
   }
 
   onDeleteCategory(id: number): void {
     if (confirm('Are you sure you want to delete this category?')) {
       this.categoryService.deleteCategory(id);
-      this.categories = this.categoryService.getCategories(); // Refresh the list
     }
   }
+
 }

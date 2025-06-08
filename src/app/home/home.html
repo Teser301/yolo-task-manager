@@ -1,9 +1,0 @@
-<div class="category-list">
-    <h2>Categories</h2>
-    @for (category of categories; track category.id) {
-    <div class="category-item">
-        <app-category-card [category]="category" />
-        <button (click)="onDeleteCategory(category.id)">Delete</button>
-    </div>
-    }
-</div>

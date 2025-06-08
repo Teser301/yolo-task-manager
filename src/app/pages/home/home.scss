@@ -1,0 +1,25 @@
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.delete-btn {
+  background-color: #fff;
+  color: #333;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: #f0f0f0;
+}
