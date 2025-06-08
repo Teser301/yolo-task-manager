@@ -1,16 +1,22 @@
-@if (category) {
-<h1>{{category.title}}</h1>
-<p>This is the category for everything {{category.title}} related</p>
-<p>Following tasks assigned to this are:</p>
-<div class="tasks">
-    <h3>Tasks ({{ category.tasks.length }})</h3>
-    @for (task of category.tasks; track task.id) {
-    <app-task-card [task]="task" [category]="category" />
+<section>
+    @if (category) {
+    <div>
+        <h1>{{category.title}}</h1>
+        <p>This is the category for everything {{category.title}} related</p>
+        <p>Following tasks assigned to this are:</p>
+        <div class="tasks">
+            <h3>Tasks ({{ category.tasks.length }})</h3>
+            @for (task of category.tasks; track task.id) {
+            <app-task-card [task]="task" [category]="category" />
+            }
+        </div>
+        <button (click)="onDeleteCategory(category.id)">Delete</button>
+    </div>
+    } @else {
+    <div>
+        <h1>Category not found</h1>
+        <p>This category could not be found. Please report this</p>
+    </div>
     }
-</div>
-<button (click)="onDeleteCategory(category.id)">Delete</button>
-}@else {
-<h1>Category not found</h1>
-<p>This category could not be found. Please report this</p>
-}
-<button routerLink="/">Return</button>
+    <button routerLink="/">Return</button>
+</section>

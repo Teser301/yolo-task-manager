@@ -1,9 +1,17 @@
-<div routerLink="/category/{{category().id}}" class="category-card">
+<section class="category-card">
     <div class="category-content">
-        <h3>{{ category().title }}</h3>
-        <p>{{category().description}}</p>
+        <div>
+            <h3>{{ category().title }}</h3>
+            <p>{{ category().description }}</p>
+            <button routerLink="/category/{{category().id}}">View Category</button>
+
+        </div>
+        <div>
+            <button class="delete-btn" (click)="onDelete()">Delete</button>
+            <button class="delete-btn" (click)="onEdit()">Edit</button>
+        </div>
     </div>
     @for (task of category().tasks; track task.id) {
     <app-task-card [task]="task" [category]="category()" />
     }
-</div>
+</section>

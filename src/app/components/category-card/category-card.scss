@@ -1,26 +1,19 @@
 .category-card {
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: red;
+}
+.category-content {
+  display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
   margin: 10px 0;
-  border-radius: 8px;
-}
-.category-content h3 {
-  margin: 0;
-  color: #333;
-}
-
-.delete-btn {
-  background-color: #fff;
-  color: #333;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.delete-btn:hover {
-  background-color: #f0f0f0;
+  h3,
+  p {
+    margin: 0;
+    color: #333;
+  }
 }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Category } from '../models/category.model';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  private categories: Category[] = [
+  private categoriesData: Category[] = [
     {
       id: 1,
       title: 'Work',
@@ -33,23 +34,34 @@ export class CategoryService {
   ];
   constructor() { }
 
+  private categoriesSubject = new BehaviorSubject<Category[]>(this.categoriesData);
+  categories$ = this.categoriesSubject.asObservable();
+
   getCategories(): Category[] {
-    return this.categories;
+    return this.categoriesSubject.value;
   }
   getCategory(id: number): Category | undefined {
-    return this.categories.find(category => category.id === id);
+    return this.categoriesSubject.value.find((c) => c.id === id);
   }
 
   deleteCategory(id: number): boolean {
-    const initialLength = this.categories.length;
-    this.categories = this.categories.filter(category => category.id !== id);
-    return this.categories.length !== initialLength;
+    const updatedCategories = this.categoriesSubject.value.filter(
+      (c) => c.id !== id
+    );
+    this.categoriesSubject.next(updatedCategories);
+    return updatedCategories.length !== this.categoriesSubject.value.length;
   }
 
   deleteTask(categoryId: number, taskId: number): void {
-    const category = this.categories.find(c => c.id === categoryId);
-    if (category) {
-      category.tasks = category.tasks.filter(task => task.id !== taskId);
-    }
+    const updatedCategories = this.categoriesSubject.value.map((category) => {
+      if (category.id === categoryId) {
+        return {
+          ...category,
+          tasks: category.tasks.filter((task) => task.id !== taskId),
+        };
+      }
+      return category;
+    });
+    this.categoriesSubject.next(updatedCategories);
   }
 }
