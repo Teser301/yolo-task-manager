@@ -3,28 +3,28 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database.db import get_db
-from api.models.category import CategoryCreate, CategoryUpdate, CategoryResponse
+from api.models.category import  CategoryBase, CategoryWithId
 from api.crud import category as crud_category
 
 router = APIRouter(prefix="/categories", tags=["categories"])
 
-@router.post("/", response_model=CategoryResponse)
-def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
+@router.post("/", response_model=CategoryWithId)
+def create_category(category: CategoryBase, db: Session = Depends(get_db)):
     return crud_category.create_category(db=db, category=category)
 
-@router.get("/", response_model=List[CategoryResponse])
+@router.get("/", response_model=List[CategoryWithId])
 def read_categories(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crud_category.get_categories(db=db, skip=skip, limit=limit)
 
-@router.get("/{category_id}", response_model=CategoryResponse)
+@router.get("/{category_id}", response_model=CategoryWithId)
 def read_category(category_id: int, db: Session = Depends(get_db)):
     db_category = crud_category.get_category(db=db, category_id=category_id)
     if db_category is None:
         raise HTTPException(status_code=404, detail="Category not found")
     return db_category
 
-@router.put("/{category_id}", response_model=CategoryResponse)
-def update_category(category_id: int, category_update: CategoryUpdate, db: Session = Depends(get_db)):
+@router.put("/{category_id}", response_model=CategoryWithId)
+def update_category(category_id: int, category_update: CategoryWithId, db: Session = Depends(get_db)):
     db_category = crud_category.update_category(db=db, category_id=category_id, category_update=category_update)
     if db_category is None:
         raise HTTPException(status_code=404, detail="Category not found")
