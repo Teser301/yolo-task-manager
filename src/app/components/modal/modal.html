@@ -1,1 +1,17 @@
-<p>modal works!</p>
+@if (modalService.showCategoryModal) {
+<div class="modal">
+    @if (modalService.modalType == "add") {
+    <div class="modal-content">
+        <h2>Add New Category</h2>
+        <form [formGroup]="newCategory">
+            <input formControlName="title">
+            <textarea formControlName="description"></textarea>
+            <button (click)="onSubmit()">Create</button>
+        </form>
+    </div>
+    }
+    @if (modalService.modalType == "edit") {
+    <h2>Modifying a element!</h2>
+    }
+</div>
+}

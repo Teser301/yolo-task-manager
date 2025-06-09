@@ -18,10 +18,16 @@ export class CategoryView implements OnInit {
   private categoryService = inject(CategoryService);
 
   ngOnInit() {
-    const id = Number(
-      this.route.parent?.snapshot.paramMap.get('categoryId')
-    );
-    this.category = this.categoryService.getCategory(Number(id));
+    const id = Number(this.route.parent?.snapshot.paramMap.get('categoryId'));
+
+    this.categoryService.getCategoryById(id).subscribe({
+      next: (category) => {
+        this.category = category; // Assign the resolved Category object
+      },
+      error: (err) => {
+        console.error('Failed to load category:', err);
+      }
+    });
   }
   onDeleteCategory(id: number): void {
     if (confirm('Are you sure you want to delete this category?')) {

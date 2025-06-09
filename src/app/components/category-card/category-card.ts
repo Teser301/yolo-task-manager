@@ -12,14 +12,19 @@ import { CategoryService } from '../../services/category';
 })
 export class CategoryCard {
   category = input.required<Category>();
-  delete = output<number>();
+  categoryDeleted = output<number>();
   edit = output<Category>();
 
   constructor(private categoryService: CategoryService) { }
 
   onDelete() {
-    console.log('trying to delete')
-    this.delete.emit(this.category().id);
+    if (confirm('Are you sure?')) {
+      this.categoryService.deleteCategory(this.category().id)
+        .subscribe({
+          next: () => this.categoryDeleted.emit(this.category().id),
+          error: (err) => alert('Failed to delete')
+        });
+    }
   }
 
   onEdit() {

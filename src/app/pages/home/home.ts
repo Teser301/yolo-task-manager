@@ -2,10 +2,12 @@ import { Component } from "@angular/core";
 import { CategoryCard } from "../../components/category-card/category-card";
 import { Category } from "../../models/category.model";
 import { CategoryService } from "../../services/category";
+import { ModalService } from "../../services/modal/modal";
 
 
 @Component({
   selector: 'app-home',
+  standalone: true,
   imports: [CategoryCard],
   templateUrl: './home.html',
   styleUrl: './home.scss'
@@ -13,34 +15,24 @@ import { CategoryService } from "../../services/category";
 export class Home {
   categories: Category[] = [];
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(
+    private categoryService: CategoryService,
+    public modalService: ModalService
+  ) { }
 
   ngOnInit(): void {
-    this.categoryService.categories$.subscribe((categories) => {
+    this.categoryService.categories$.subscribe(categories => {
       this.categories = categories;
     });
-  }
 
-  onDeleteCategory(id: number): void {
-    if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryService.deleteCategory(id);
-    }
+    this.categoryService.getCategories().subscribe();
   }
-
   onCreateCategory() {
-    const emptyCategory = {
-      title: '',
-      description: '',
-      tasks: []
-    };
-
-    this.categoryService.createNewCategory(emptyCategory).subscribe({
-      next: (response) => {
-        console.log('Category created:', response);
-      },
-      error: (err) => {
-        console.error('Error creating category:', err);
-      }
-    });
+    this.modalService.showAddCategory();
   }
+
+  handleCategoryDeleted(id: number) {
+    this.categoryService.deleteCategory(id).subscribe();
+  }
+
 }

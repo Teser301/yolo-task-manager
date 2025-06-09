@@ -1,85 +1,97 @@
 import { inject, Injectable } from '@angular/core';
 import { Category } from '../models/category.model';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap, catchError, throwError, delay } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
-  http = inject(HttpClient)
-  private categoriesData: Category[] = [
-    {
-      id: 1,
-      title: 'Work',
-      description: 'For work things.',
-      tasks: [
-        {
-          id: 1,
-          title: 'Call Mechanic',
-          status: 'To Do',
-          date: new Date('2025-06-13')
-        },
-        {
-          id: 2,
-          title: 'Attend Meeting',
-          status: 'In Progress',
-          date: new Date('2025-06-13'),
-          description: 'Quarterly planning'
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Hobbies',
-      tasks: []
-    }
-  ];
-  constructor() { }
+  private http = inject(HttpClient);
+  private apiUrl = 'http://localhost:8000';
+
+  // Centralized state (starts empty, populated by API)
+  public categoriesSubject = new BehaviorSubject<Category[]>([]);
+  public categories$ = this.categoriesSubject.asObservable();
+
+  constructor() {
+
+  }
 
 
-  createNewCategory(category: any): Observable<any> {
-    const url = `http://localhost:8000/categories`;
-    return this.http.post(url, category, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).pipe(
+  // Get All Categories
+  getCategories(): Observable<Category[]> {
+    var url = `${this.apiUrl}/categories`
+    return this.http.get<Category[]>(url).pipe(
       tap({
-        next: (response) => console.log('Creation successful:', response),
-        error: (err) => console.error('Creation failed:', err)
+        next: (categories) => {
+          console.log('Fetched categories:', categories);
+          this.categoriesSubject.next(categories); // <-- Update subject here
+        },
+        error: (err) => console.error('Fetch error:', err)
+      })
+    );
+  }
+  // Get category by ID
+  getCategoryById(id: number): Observable<Category> {
+    var url = `${this.apiUrl}/categories/${id}`
+    return this.http.get<Category>(url);
+  }
+
+  // Create and Delete with Optimistic Behaviour
+
+  createNewCategory(category: Category): Observable<Category> {
+    const url = `${this.apiUrl}/categories`;
+    const current = this.categoriesSubject.value;
+
+    // Trying Optimistic Behavior
+    // So Im generating a temporary fake ID so the ui can track it
+    const tempId = Math.floor(Math.random() * -10000);
+    const optimisticCategory: Category = { ...category, id: tempId };
+    // Then add it to the UI, expecting it to be there already
+    this.categoriesSubject.next([...current, optimisticCategory]);
+
+    return this.http.post<Category>(url, category).pipe(
+      // For testing optimistic behaviour
+      // delay(2000),
+      tap((newCategory) => {
+        // Replace the temp category with the real one when it's done
+        const updated = this.categoriesSubject.value.map(c =>
+          c.id === tempId ? newCategory : c
+        );
+        this.categoriesSubject.next(updated);
+      }),
+      catchError(err => {
+        // If it turns out it wasn't there
+        this.categoriesSubject.next(current);
+        return throwError(() => err);
       })
     );
   }
 
-  private categoriesSubject = new BehaviorSubject<Category[]>(this.categoriesData);
-  categories$ = this.categoriesSubject.asObservable();
+  deleteCategory(id: number): Observable<void> {
+    // Optimistic update
+    const url = `${this.apiUrl}/categories/${id}`
+    const current = this.categoriesSubject.value;
+    this.categoriesSubject.next(current.filter(c => c.id !== id));
 
-  getCategories(): Category[] {
-    return this.categoriesSubject.value;
-  }
-  getCategory(id: number): Category | undefined {
-    return this.categoriesSubject.value.find((c) => c.id === id);
-  }
-
-  deleteCategory(id: number): boolean {
-    const updatedCategories = this.categoriesSubject.value.filter(
-      (c) => c.id !== id
+    return this.http.delete<void>(url).pipe(
+      catchError(err => {
+        this.categoriesSubject.next(current);
+        console.error('Delete failed:', err);
+        return throwError(() => err);
+      })
     );
-    this.categoriesSubject.next(updatedCategories);
-    return updatedCategories.length !== this.categoriesSubject.value.length;
   }
 
-  deleteTask(categoryId: number, taskId: number): void {
-    const updatedCategories = this.categoriesSubject.value.map((category) => {
-      if (category.id === categoryId) {
-        return {
-          ...category,
-          tasks: category.tasks.filter((task) => task.id !== taskId),
-        };
-      }
-      return category;
-    });
-    this.categoriesSubject.next(updatedCategories);
-  }
+  // Modify
+
+
+  // deleteTask(categoryId: number, taskId: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.apiUrl}/categories/${categoryId}/tasks/${taskId}`).pipe(
+  //     tap(() => this.refreshCategories())
+  //   );
+  // }
+
 
 }

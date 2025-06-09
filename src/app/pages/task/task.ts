@@ -33,20 +33,24 @@ export class TaskView {
       this.loadTask(categoryId, taskId);
     }
   }
-
   private loadTask(categoryId: number, taskId: number): void {
-    const category = this.categoryService.getCategory(categoryId);
-    if (!category) return;
-    this.category = category;
-    this.task = category.tasks.find(task => task.id === taskId);
+    this.categoryService.getCategoryById(categoryId).subscribe({
+      next: (category) => {
+        this.category = category;
+        this.task = category.tasks.find(task => task.id === taskId);
+      },
+      error: (err) => {
+        console.error('Failed to load category:', err);
+      }
+    });
   }
   onDeleteTask(): void {
-    if (!this.category || !this.task) return;
+    // if (!this.category || !this.task) return;
 
-    if (confirm('Are you sure you want to delete this task?')) {
-      this.categoryService.deleteTask(this.category.id, this.task.id);
-      this.router.navigate(['/category', this.category.id]); // Redirect back to category
-    }
+    // if (confirm('Are you sure you want to delete this task?')) {
+    //   this.categoryService.deleteTask(this.category.id, this.task.id);
+    //   this.router.navigate(['/category', this.category.id]); // Redirect back to category
+    // }
   }
   returnToCategory() {
     const categoryId = this.route.parent?.snapshot.paramMap.get('categoryId');

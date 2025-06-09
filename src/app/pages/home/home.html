@@ -3,9 +3,7 @@
     <button (click)="onCreateCategory()">Create Category</button>
     <div class="category-list">
         @for (category of categories; track category.id) {
-        <div class="category-item">
-            <app-category-card [category]="category" (delete)="onDeleteCategory($event)" />
-        </div>
+        <app-category-card [category]="category" (categoryDeleted)="handleCategoryDeleted($event)" />
         }
     </div>
 </div>
