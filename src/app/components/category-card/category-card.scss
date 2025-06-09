@@ -19,14 +19,6 @@
     }
     button {
       background-color: #2563eb;
-      color: white;
-      padding: 0.4rem 0.9rem;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-      border: none;
-      cursor: pointer;
 
       &:hover {
         background-color: #3b82f6;
@@ -36,13 +28,8 @@
     .delete-btn,
     .edit-btn {
       color: white;
-      border: none;
       padding: 0.4rem 0.75rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
       margin-left: 0.5rem;
-      cursor: pointer;
     }
     .delete-btn {
       background-color: #dc2626;

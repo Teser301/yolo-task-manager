@@ -1,9 +1,79 @@
-.modal {
+.modal-overlay {
   position: fixed;
-  width: 50%;
-  height: 50%;
-  left: 0;
-  right: 0;
   top: 0;
-  background-color: white;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(17, 24, 39, 0.85); // #111827 w/ opacity
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-box {
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: #f9fafb;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #374151;
+      padding-bottom: 0.5rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input,
+      textarea {
+        background-color: #111827;
+        border: 1px solid #374151;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        color: #d1d5db;
+        font-family: "Inter", sans-serif;
+        font-size: 1rem;
+
+        &::placeholder {
+          color: #6b7280; // Placeholder gray
+        }
+
+        &:focus {
+          outline: none;
+          border-color: #3b82f6; // Blue focus ring
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+      }
+
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+
+        button {
+          background-color: #3b82f6;
+          color: #f9fafb;
+          &:hover {
+            background-color: #2563eb;
+          }
+          &:last-child {
+            background-color: transparent;
+            border: 1px solid #6b7280;
+            color: #d1d5db;
+            &:hover {
+              background-color: #374151;
+            }
+          }
+        }
+      }
+    }
+  }
 }

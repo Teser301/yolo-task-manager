@@ -8,10 +8,6 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
   font-family: "Inter", sans-serif;
 
-  .category-content {
-    margin-bottom: 2rem;
-  }
-
   .category-title {
     font-size: 2rem;
     font-weight: 700;
@@ -31,11 +27,8 @@
     padding: 1rem;
     border-radius: 10px;
     margin-bottom: 1.5rem;
-
-    .tasks-title {
+    .title {
       font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
       color: #facc15; // accent color (gold/yellow)
     }
 
@@ -45,43 +38,17 @@
     }
   }
 
-  .btn {
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-
-    &.btn-danger {
-      background-color: #dc2626;
-      color: white;
-
-      &:hover {
-        background-color: #ef4444;
-      }
-    }
-
-    &.btn-secondary {
-      background-color: #374151;
-      color: white;
-      margin-top: 1rem;
-
-      &:hover {
-        background-color: #4b5563;
-      }
-    }
+  .footer-buttons {
+    display: flex;
+    gap: 10;
   }
-
   .category-error {
     text-align: center;
-
     h1 {
       font-size: 1.8rem;
       color: #f87171;
       margin-bottom: 0.5rem;
     }
-
     p {
       color: #94a3b8;
     }

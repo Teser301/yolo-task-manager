@@ -10,23 +10,26 @@
   color: #d1d5db; // Soft light text
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 
-  .title {
-    font-size: 1.75rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    color: #f9fafb; // Bright heading
-    border-bottom: 2px solid #374151;
-    padding-bottom: 0.5rem;
+  .task-header {
+    margin-bottom: 10px;
+    .title {
+      font-size: 1.75rem;
+    }
+    .creation-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      button {
+        width: 100%;
+      }
+    }
   }
-
   .category-list {
     display: flex;
     flex-direction: column;
     gap: 1rem;
   }
-
   .category-item {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
     app-category-card {
       display: block;
       padding: 1rem;

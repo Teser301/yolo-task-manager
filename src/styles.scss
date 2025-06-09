@@ -7,3 +7,42 @@ body {
   height: 100%;
   font-family: "Inter", sans-serif;
 }
+
+button {
+  color: white;
+  border: none;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  &.btn-primary {
+    background-color: #44a31e;
+    &:hover {
+      background-color: #5be026;
+    }
+  }
+  &.btn-danger {
+    background-color: #dc2626;
+    &:hover {
+      background-color: #ef4444;
+    }
+  }
+
+  &.btn-secondary {
+    background-color: #374151;
+    &:hover {
+      background-color: #4b5563;
+    }
+  }
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #f9fafb; // Bright heading
+  border-bottom: 2px solid #374151;
+  padding-bottom: 0.5rem;
+}
