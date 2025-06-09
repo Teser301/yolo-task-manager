@@ -16,8 +16,8 @@ def get_category(db: Session, category_id: int) -> Optional[CategoryWithId]:
 def get_categories(db: Session, skip: int = 0, limit: int = 100) -> List[Category]:
     return db.query(Category).offset(skip).limit(limit).all()
 
-def update_category(db: Session, category_update: CategoryWithId) -> Optional[CategoryWithId]:
-    db_category = db.query(Category).filter(Category.id == category_update.id).first()
+def update_category(db: Session, category_id: int, category_update: CategoryBase) -> Optional[Category]:
+    db_category = db.query(Category).filter(Category.id == category_id).first()
     if db_category:
         update_data = category_update.dict(exclude_unset=True)
         for field, value in update_data.items():
