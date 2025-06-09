@@ -30,6 +30,9 @@ export class Home {
   onCreateCategory() {
     this.modalService.showAddCategory();
   }
+  onCreateTask() {
+    this.modalService.showAddTask();
+  }
 
   handleCategoryDeleted(id: number) {
     this.categoryService.deleteCategory(id).subscribe();

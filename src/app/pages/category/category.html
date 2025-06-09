@@ -4,15 +4,12 @@
         <h1 class="category-title">{{category.title}}</h1>
         <p class="category-description">This is the category for everything {{category.title}} related</p>
         <p class="category-subtext">Following tasks assigned to this are:</p>
-
         <div class="tasks">
-            <h3 class="tasks-title">Tasks ({{ category.tasks.length }})</h3>
+            <h3 class="title">Tasks ({{ category.tasks.length }})</h3>
             @for (task of category.tasks; track task.id) {
             <app-task-card [task]="task" [category]="category" />
             }
         </div>
-
-        <button class="btn btn-danger" (click)="onDeleteCategory(category.id)">Delete</button>
     </div>
     } @else {
     <div class="category-error">
@@ -20,6 +17,8 @@
         <p>This category could not be found. Please report this</p>
     </div>
     }
-
-    <button class="btn btn-secondary" routerLink="/">Return</button>
+    <div class="footer-buttons">
+        @if (category) {<button class="btn btn-danger" (click)="onDeleteCategory(category.id)">Delete</button>}
+        <button class="btn btn-secondary" routerLink="/">Return</button>
+    </div>
 </section>

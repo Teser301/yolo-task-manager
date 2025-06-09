@@ -12,6 +12,7 @@ import { Category } from '../../models/category.model';
 })
 export class Modal {
   newCategory: FormGroup;
+  newTask: FormGroup;
   private categoryService = inject(CategoryService); // Inject the service
 
 
@@ -23,6 +24,12 @@ export class Modal {
       title: ['', Validators.required],
       description: ['', [Validators.required]]
     });
+    this.newTask = this.fb.group({
+      title: ['', Validators.required],
+      description: ['', [Validators.required]],
+      status: ['', [Validators.required]],
+      due: ['', [Validators.required]]
+    })
   }
 
   onSubmit() {

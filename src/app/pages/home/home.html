@@ -1,6 +1,11 @@
 <div class="task-manager">
-    <h2 class="title">Task Manager</h2>
-    <button (click)="onCreateCategory()">Create Category</button>
+    <div class="task-header">
+        <h2 class="title">Task Manager</h2>
+        <div class="creation-container">
+            <button class="btn-primary" (click)="onCreateCategory()">Create Category</button>
+            <button class="btn-primary" (click)="onCreateTask()">Create Task</button>
+        </div>
+    </div>
     <div class="category-list">
         @for (category of categories; track category.id) {
         <app-category-card [category]="category" (categoryDeleted)="handleCategoryDeleted($event)" />

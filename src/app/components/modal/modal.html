@@ -1,17 +1,51 @@
 @if (modalService.showCategoryModal) {
-<div class="modal">
-    @if (modalService.modalType == "add") {
-    <div class="modal-content">
+<div class="modal-overlay">
+    <div class="modal-box">
+        @if (modalService.modalType == "add") {
         <h2>Add New Category</h2>
-        <form [formGroup]="newCategory">
-            <input formControlName="title">
-            <textarea formControlName="description"></textarea>
-            <button (click)="onSubmit()">Create</button>
+        <form [formGroup]="newCategory" (ngSubmit)="onSubmit()">
+            <input formControlName="title" placeholder="Title" />
+            <textarea formControlName="description" placeholder="Add description"></textarea>
+            <div class=" modal-actions">
+                <button type="submit">Create</button>
+                <button type="button" (click)="modalService.closeModal()">Cancel</button>
+            </div>
         </form>
+        }
+        @if (modalService.modalType == "edit") {
+        <h2>Modifying a category!</h2>
+        }
     </div>
-    }
-    @if (modalService.modalType == "edit") {
-    <h2>Modifying a element!</h2>
-    }
+</div>
+}
+@if (modalService.showTaskModal) {
+<div class="modal-overlay">
+    <div class="modal-box">
+        @if (modalService.modalType == "add") {
+        <h2>Add New Task</h2>
+        <form [formGroup]="newTask" (ngSubmit)="onSubmit()">
+            <input formControlName="title" placeholder="Title" />
+            <textarea formControlName="description" placeholder="Add description"></textarea>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" formControlName="status" class="status-dropdown">
+                    <option value="todo">Todo</option>
+                    <option value="inprogress">In Progress</option>
+                    <option value="done">Done</option>
+                </select>
+            </div>
+
+
+            <div class=" modal-actions">
+                <button type="submit">Create</button>
+                <button type="button" (click)="modalService.closeModal()">Cancel</button>
+            </div>
+        </form>
+        }
+        @if (modalService.modalType == "edit") {
+        <h2>Modifying a task!</h2>
+        }
+    </div>
 </div>
 }
