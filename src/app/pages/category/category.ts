@@ -29,10 +29,15 @@ export class CategoryView implements OnInit {
       }
     });
   }
-  onDeleteCategory(id: number): void {
-    if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryService.deleteCategory(id);
-      this.router.navigate(['/']); // Redirect to home after deletion
-    }
+  handleCategoryDeleted(id: number): void {
+    this.categoryService.deleteCategory(id).subscribe({
+      next: () => {
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        console.error('Failed to delete category', err);
+        alert('Could not delete category. Please try again.');
+      }
+    });
   }
 }
