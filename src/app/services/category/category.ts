@@ -11,8 +11,11 @@ export class CategoryService {
   private apiUrl = 'http://localhost:8000';
 
   // Centralized state (starts empty, populated by API)
-  public categoriesSubject = new BehaviorSubject<Category[]>([]);
-  public categories$ = this.categoriesSubject.asObservable();
+  private categoriesSubject = new BehaviorSubject<Category[]>([]);
+  categories$ = this.categoriesSubject.asObservable();
+
+  private categoryUpdated = new BehaviorSubject<number | null>(null);
+  categoryUpdated$ = this.categoryUpdated.asObservable();
 
   constructor() { }
 
@@ -92,6 +95,12 @@ export class CategoryService {
     );
 
     return this.http.put<Category>(url, category).pipe(
+      tap(updatedCategory => {
+        // Update with the actual server response
+        const newState = current.map(c => c.id === id ? updatedCategory : c);
+        this.categoriesSubject.next(newState);
+        this.categoryUpdated.next(id); // Notify specific category update
+      }),
       catchError(err => {
         // Revert on error
         this.categoriesSubject.next(current);

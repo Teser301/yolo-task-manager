@@ -4,13 +4,11 @@
         <div class="category-header">
             <div>
                 <h1 class="category-title">{{category.title}}</h1>
-                <p class="category-description">This is the category for everything {{category.title}} related</p>
+                <p class="category-description">{{category.description}}</p>
                 <p class="category-subtext">Following tasks assigned to this are:</p>
             </div>
             <div>
-                <button class="btn-primary">Edit Category</button>
-                <!-- <button class="btn-danger" (click)="onDelete()">Delete</button>
-                <button class="btn-info" (click)="onEdit()">Edit</button> -->
+                <button class="btn-primary" (click)="handleCategoryEdit(category.id)">Edit Category</button>
             </div>
         </div>
 
