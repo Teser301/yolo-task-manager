@@ -10,7 +10,16 @@
             <button class="btn-info" (click)="onEdit()">Edit</button>
         </div>
     </div>
-    @for (task of category().tasks; track task.id) {
-    <app-task-card [task]="task" [category]="category()" />
+    @if (category().tasks && category().tasks.length > 0) {
+    <div class="task-list">
+        @for (task of category().tasks; track task.id) {
+        <app-task-card [task]="task" [category]="category()" />
+        }
+    </div>
+    } @else {
+    <div class="empty-tasks">
+        No tasks in this category yet
+    </div>
     }
+
 </section>
