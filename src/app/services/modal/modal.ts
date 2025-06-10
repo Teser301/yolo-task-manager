@@ -45,6 +45,7 @@ export class ModalService {
   // Shared
   closeModal() {
     this.showCategoryModal = false;
+    this.showTaskModal = false;
     this.modalType = null;
     this.modalCategorySubject.next(null);
     console.log('Modal closed');
