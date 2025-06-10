@@ -3,7 +3,9 @@
         <h2 class="title">Task Manager</h2>
         <div class="creation-container">
             <button class="btn-primary" (click)="onCreateCategory()">Create Category</button>
+            @if (categories.length > 0) {
             <button class="btn-primary" (click)="onCreateTask()">Create Task</button>
+            }
         </div>
     </div>
     <div class="category-list">
