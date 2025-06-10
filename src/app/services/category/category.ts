@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Category } from '../models/category.model';
+import { Category } from '../../models/category.model';
 import { BehaviorSubject, Observable, tap, catchError, throwError, delay } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,10 +14,7 @@ export class CategoryService {
   public categoriesSubject = new BehaviorSubject<Category[]>([]);
   public categories$ = this.categoriesSubject.asObservable();
 
-  constructor() {
-
-  }
-
+  constructor() { }
 
   // Get All Categories
   getCategories(): Observable<Category[]> {
@@ -84,10 +81,7 @@ export class CategoryService {
     );
   }
 
-  // editCategory(id: number, category: Category): Observable<Category> {
-  //   const url = `${this.apiUrl}/categories/${id}`
-  //   return this.http.put<Category>(url, category).pipe()
-  // }
+  // Edit categories
   editCategory(id: number, category: Category): Observable<Category> {
     const url = `${this.apiUrl}/categories/${id}`;
     const current = this.categoriesSubject.value;

@@ -2,7 +2,7 @@ import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Category } from '../../models/category.model';
 import { TaskCard } from '../task-card/task-card';
-import { CategoryService } from '../../services/category';
+import { CategoryService } from '../../services/category/category';
 import { ModalService } from '../../services/modal/modal';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import { CategoryCard } from "../../components/category-card/category-card";
 import { Category } from "../../models/category.model";
-import { CategoryService } from "../../services/category";
+import { CategoryService } from "../../services/category/category";
 import { ModalService } from "../../services/modal/modal";
 
 

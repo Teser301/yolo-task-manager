@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ModalService } from '../../services/modal/modal';
 import { Category } from '../../models/category.model';
-import { CategoryService } from '../../services/category';
+import { CategoryService } from '../../services/category/category';
 
 @Component({
   selector: 'app-category-form',
@@ -40,7 +40,7 @@ export class CategoryForm {
     });
   }
   // Create Category
-  onSubmit() {
+  onCreateSubmit() {
     if (this.newCategory.valid) {
       const formData: Category = {
         ...this.newCategory.value,
@@ -68,7 +68,6 @@ export class CategoryForm {
       const currentCategory = this.modalService.getCurrentModalCategory();
 
       if (!currentCategory) return;
-
       const formData: Category = {
         ...currentCategory,
         ...this.editCategory.value
