@@ -19,8 +19,8 @@ def get_tasks(db: Session ) -> List[Task]:
 def get_tasks_by_category(db: Session, category_id: int) -> List[Task]:
     return db.query(Task).filter(Task.category_id == category_id).all()
 
-def update_task(db: Session, task_update: TaskWithId) -> Optional[TaskWithId]:
-    db_task = db.query(Task).filter(Task.id == task_update.id).first()
+def update_task(db: Session, task_id: int, task_update: TaskBase) -> Optional[Task]:
+    db_task = db.query(Task).filter(Task.id == task_id).first()
     if db_task:
         update_data = task_update.dict(exclude_unset=True)
         for field, value in update_data.items():

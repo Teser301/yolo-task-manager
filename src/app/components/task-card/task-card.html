@@ -1,4 +1,8 @@
 <div class="task-card">
   <h3>{{ task().title }}</h3>
-  <button [routerLink]="['/category', category().id, 'task', task().id]">View Task</button>
+  <div class="task-buttons">
+    <button class="btn-primary" [routerLink]=" ['/category', category().id, 'task' , task().id]">View Task</button>
+    <button class="btn-danger" (click)="onDelete()">Delete</button>
+    <button class="btn-info" (click)="onEdit()">Edit</button>
+  </div>
 </div>

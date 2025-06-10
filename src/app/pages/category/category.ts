@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { CategoryService } from '../../services/category';
+import { CategoryService } from '../../services/category/category';
 import { Category } from '../../models/category.model';
 import { TaskCard } from '../../components/task-card/task-card';
 

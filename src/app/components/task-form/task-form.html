@@ -1,0 +1,145 @@
+<div>
+    @if (modalService.modalType == "add") {
+    <h2 class="form-title">Add New Task</h2>
+    <form [formGroup]="newTask" class="task-form" (ngSubmit)="onCreateSubmit()">
+        <!--Title-->
+        <div class="form-group">
+            <label for="title-add" class="form-label">Title</label>
+            <input class="form-input" formControlName="title" placeholder="Title" type="text" />
+            @if (newTask.get('title')?.touched && newTask.get('title')?.invalid) {
+            <div class="error">
+                @if (newTask.get('title')?.errors?.['required']) {
+                <small>Title is required.</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Description-->
+        <div class="form-group">
+            <label for="description-add" class="form-label">Description</label>
+            <textarea class="form-input" formControlName="description" placeholder="Add description"></textarea>
+            @if (newTask.get('description')?.touched && newTask.get('description')?.invalid) {
+            <div class="error">
+                @if (newTask.get('description')?.errors?.['required']) {
+                <small>Description is required.</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Category-->
+        <div class="form-group">
+            <label for="category_id">Select a category</label>
+            <select id="category_id" formControlName="category_id" class="form-input">
+                <option value="" disabled>Select a category</option>
+                @for (category of categories; track category.id) {
+                <option [value]="category.id">{{ category.title }}</option>
+                }
+            </select>
+            @if (newTask.get('category_id')?.touched && newTask.get('category_id')?.invalid) {
+            <div class="error">
+                @if (newTask.get('category_id')?.errors?.['required']) {
+                <small>Please Choose a Category</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Due Date-->
+        <div class="form-group">
+            <label for="due">Due Date</label>
+            <input id="due" type="date" formControlName="due" class="form-input" />
+            @if (newTask.get('due')?.touched && newTask.get('due')?.invalid) {
+            <div class="error">
+                @if (newTask.get('due')?.errors?.['required']) {
+                <small>Due date is required.</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Status-->
+        <div class="form-group">
+            <label for="status" class="form-label">Status</label>
+            <select id="status" formControlName="status" class="form-input">
+                <option [value]="1">Todo</option>
+                <option [value]="2">In Progress</option>
+                <option [value]="3">Done</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <button type="button" class="btn btn-secondary" (click)="modalService.closeModal()">Cancel</button>
+        </div>
+    </form>
+    }
+
+    @if (modalService.modalType == "edit") {
+    <h2 class="form-title">Edit Task</h2>
+    <form [formGroup]="editTask" class="task-form" (ngSubmit)="onEditSubmit()">
+        <!--Title-->
+        <div class="form-group">
+            <label for="title-edit" class="form-label">Title</label>
+            <input class="form-input" formControlName="title" placeholder="Title" type="text" />
+            @if (newTask.get('title')?.touched && newTask.get('title')?.invalid) {
+            <div class="error">
+                @if (newTask.get('title')?.errors?.['required']) {
+                <small>Title is required.</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Description-->
+        <div class="form-group">
+            <label for="description-edit" class="form-label">Description</label>
+            <textarea class="form-input" formControlName="description" placeholder="Add description"></textarea>
+            @if (newTask.get('description')?.touched && newTask.get('description')?.invalid) {
+            <div class="error">
+                @if (newTask.get('description')?.errors?.['required']) {
+                <small>Description is required.</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Category-->
+        <div class="form-group">
+            <label for="category_id_edit">Select a category</label>
+            <select id="category_id_edit" formControlName="category_id" class="form-input">
+                <option value="" disabled>Select a category</option>
+                @for (category of categories; track category.id) {
+                <option [value]="category.id">{{ category.title }}</option>
+                }
+            </select>
+            @if (newTask.get('category_id')?.touched && newTask.get('category_id')?.invalid) {
+            <div class="error">
+                @if (newTask.get('category_id')?.errors?.['required']) {
+                <small>Please Choose a Category</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Due Date-->
+        <div class="form-group">
+            <label for="due_edit">Due Date</label>
+            <input id="due_edit" type="date" formControlName="due" class="form-input" />
+            @if (newTask.get('due')?.touched && newTask.get('due')?.invalid) {
+            <div class="error">
+                @if (newTask.get('due')?.errors?.['required']) {
+                <small>Due date is required.</small>
+                }
+            </div>
+            }
+        </div>
+        <!--Status-->
+        <div class="form-group">
+            <label for="status_edit" class="form-label">Status</label>
+            <select id="status_edit" formControlName="status" class="form-input">
+                <option [value]="1">Todo</option>
+                <option [value]="2">In Progress</option>
+                <option [value]="3">Done</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Update Task</button>
+            <button type="button" class="btn btn-secondary" (click)="modalService.closeModal()">Cancel</button>
+        </div>
+    </form>
+    }
+</div>

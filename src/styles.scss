@@ -24,17 +24,23 @@ button {
       background-color: #5be026;
     }
   }
-  &.btn-danger {
-    background-color: #dc2626;
-    &:hover {
-      background-color: #ef4444;
-    }
-  }
 
   &.btn-secondary {
     background-color: #374151;
     &:hover {
       background-color: #4b5563;
+    }
+  }
+  &.btn-info {
+    background-color: #2563eb;
+    &:hover {
+      background-color: #3b82f6;
+    }
+  }
+  &.btn-danger {
+    background-color: #dc2626;
+    &:hover {
+      background-color: #ef4444;
     }
   }
 }
@@ -45,4 +51,10 @@ button {
   color: #f9fafb; // Bright heading
   border-bottom: 2px solid #374151;
   padding-bottom: 0.5rem;
+}
+.error {
+  background-color: #dc2626;
+  border-radius: 6px;
+  padding: 5px;
+  margin-top: 0.25rem;
 }

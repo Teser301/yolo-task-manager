@@ -27,9 +27,9 @@ def read_task(task_id: int, db: Session = Depends(get_db)):
 def read_tasks_by_category(category_id: int, db: Session = Depends(get_db)):
     return crud_task.get_tasks_by_category(db=db, category_id=category_id)
 
-@router.put("/{task_id}", response_model=TaskWithId)
-def update_task(task_id: int, task_update: TaskWithId, db: Session = Depends(get_db)):
-    db_task = crud_task.update_task(db=db, task_id=task_id, task_update=task_update)
+@router.put("/{id}", response_model=TaskWithId)
+def update_task(id: int, task_update: TaskBase, db: Session = Depends(get_db)):
+    db_task = crud_task.update_task(db=db, task_id=id, task_update=task_update)
     if db_task is None:
         raise HTTPException(status_code=404, detail="Task not found")
     return db_task

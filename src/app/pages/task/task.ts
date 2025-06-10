@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Task } from '../../models/task.model';
 import { Category } from '../../models/category.model';
 import { ActivatedRoute } from '@angular/router';
-import { CategoryService } from '../../services/category';
+import { CategoryService } from '../../services/category/category';
 import { Router } from '@angular/router';
 
 @Component({

@@ -1,0 +1,44 @@
+<div>
+    @if (modalService.modalType == "add") {
+    <h2 class="form-title">Add New Category</h2>
+    <form [formGroup]="newCategory" (ngSubmit)="onCreateSubmit()" class="category-form">
+
+        <div class="form-group">
+            <label for="title-add" class="form-label">Title</label>
+            <input id="title-add" formControlName="title" placeholder="Title" class="form-input" />
+        </div>
+
+        <div class="form-group">
+            <label for="description-add" class="form-label">Description</label>
+            <textarea id="description-add" formControlName="description" placeholder="Add description"
+                class="form-textarea"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-primary" type="submit">Create</button>
+            <button class="btn-danger" type="button" (click)="modalService.closeModal()">Cancel</button>
+        </div>
+    </form>
+    }
+    @if (modalService.modalType == "edit") {
+    <h2 class="form-title">Modifying a category!</h2>
+    <form [formGroup]="editCategory" (ngSubmit)="onEditSubmit()" class="category-form">
+
+        <div class="form-group">
+            <label for="title-edit" class="form-label">Title</label>
+            <input id="title-edit" formControlName="title" placeholder="Title" class="form-input" />
+        </div>
+
+        <div class="form-group">
+            <label for="description-edit" class="form-label">Description</label>
+            <textarea id="description-edit" formControlName="description" placeholder="Description"
+                class="form-textarea"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button class="btn-primary" type="submit">Save Changes</button>
+            <button class="btn-danger" type="button" (click)="modalService.closeModal()">Cancel</button>
+        </div>
+    </form>
+    }
+</div>

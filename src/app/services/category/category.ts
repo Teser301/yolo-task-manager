@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Category } from '../models/category.model';
+import { Category } from '../../models/category.model';
 import { BehaviorSubject, Observable, tap, catchError, throwError, delay } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
@@ -14,10 +14,7 @@ export class CategoryService {
   public categoriesSubject = new BehaviorSubject<Category[]>([]);
   public categories$ = this.categoriesSubject.asObservable();
 
-  constructor() {
-
-  }
-
+  constructor() { }
 
   // Get All Categories
   getCategories(): Observable<Category[]> {
@@ -84,14 +81,22 @@ export class CategoryService {
     );
   }
 
-  // Modify
+  // Edit categories
+  editCategory(id: number, category: Category): Observable<Category> {
+    const url = `${this.apiUrl}/categories/${id}`;
+    const current = this.categoriesSubject.value;
 
+    // Optimistic update
+    this.categoriesSubject.next(
+      current.map(c => c.id === id ? { ...c, ...category } : c)
+    );
 
-  // deleteTask(categoryId: number, taskId: number): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrl}/categories/${categoryId}/tasks/${taskId}`).pipe(
-  //     tap(() => this.refreshCategories())
-  //   );
-  // }
-
-
+    return this.http.put<Category>(url, category).pipe(
+      catchError(err => {
+        // Revert on error
+        this.categoriesSubject.next(current);
+        return throwError(() => err);
+      })
+    );
+  }
 }
