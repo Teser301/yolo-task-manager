@@ -13,6 +13,7 @@ import { CategoryService } from '../../services/category/category';
 export class CategoryForm {
   newCategory: FormGroup;
   editCategory: FormGroup;
+  isSubmitting: boolean = false;
   private categoryService = inject(CategoryService);
 
   constructor(
@@ -41,18 +42,21 @@ export class CategoryForm {
   }
   // Create Category
   onCreateSubmit() {
-    if (this.newCategory.valid) {
+    if (this.newCategory.valid && !this.isSubmitting) {
+      this.isSubmitting = true;
       const formData: Category = {
         ...this.newCategory.value,
         tasks: []
       };
 
       this.categoryService.createNewCategory(formData).subscribe({
-        next: (response) => {
+        next: () => {
+          this.isSubmitting = false;
           this.modalService.closeModal();
           this.newCategory.reset();
         },
         error: (err) => {
+          this.isSubmitting = false;
           console.error('Error creating category:', err);
         }
       });

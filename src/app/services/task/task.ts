@@ -31,12 +31,10 @@ export class TaskService {
   }
 
   createNewTask(task: Task): Observable<Task> {
-    console.log(task)
     return this.http.post<Task>(`${this.apiUrl}/tasks`, task).pipe(
       tap(realTask => {
         const current = this.tasksSubject.value;
         this.tasksSubject.next([...current, realTask]);
-        // Refresh categories after successful task creation
         this.categoryService.getCategories().subscribe();
       }),
       catchError(err => {
@@ -53,7 +51,6 @@ export class TaskService {
 
     return this.http.delete<void>(`${this.apiUrl}/tasks/${id}`).pipe(
       tap(() => {
-        // Refresh categories after successful task deletion
         this.categoryService.getCategories().subscribe();
       }),
       catchError(err => {

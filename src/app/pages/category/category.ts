@@ -20,6 +20,8 @@ export class CategoryView implements OnInit {
   private modalService = inject(ModalService)
 
   ngOnInit() {
+
+    const id = Number(this.route.parent?.snapshot.paramMap.get('categoryId'));
     const loadCategory = (id: number) => {
       this.categoryService.getCategoryById(id).subscribe({
         next: (category) => this.category = category,
@@ -27,11 +29,10 @@ export class CategoryView implements OnInit {
       });
     };
 
-    const id = Number(this.route.parent?.snapshot.paramMap.get('categoryId'));
     loadCategory(id);
 
     // Listen for category updates
-    this.categoryService.categoryUpdated$.subscribe(updatedId => {
+    this.categoryService.category$.subscribe(updatedId => {
       if (updatedId === id) {
         loadCategory(id);
       }
