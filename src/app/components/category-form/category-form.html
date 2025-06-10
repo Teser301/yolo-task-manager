@@ -26,13 +26,14 @@
 
         <div class="form-group">
             <label for="title-edit" class="form-label">Title</label>
-            <input id="title-edit" formControlName="title" placeholder="Title" class="form-input" />
+            <input id="title-edit" name="title" formControlName="title" placeholder="Title" class="form-input"
+                autocomplete="off" />
         </div>
 
         <div class="form-group">
             <label for="description-edit" class="form-label">Description</label>
-            <textarea id="description-edit" formControlName="description" placeholder="Description"
-                class="form-textarea"></textarea>
+            <textarea autocomplete="off" id="description-edit" name="descriptionForCategory"
+                formControlName="description" placeholder="Descriptionwww" class="form-textarea"></textarea>
         </div>
 
         <div class="form-actions">

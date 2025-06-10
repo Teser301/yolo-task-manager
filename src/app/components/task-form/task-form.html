@@ -77,7 +77,7 @@
         <!--Title-->
         <div class="form-group">
             <label for="title-edit" class="form-label">Title</label>
-            <input class="form-input" formControlName="title" placeholder="Title" type="text" />
+            <input autocomplete="off" class="form-input" formControlName="title" placeholder="Title" type="text" />
             @if (newTask.get('title')?.touched && newTask.get('title')?.invalid) {
             <div class="error">
                 @if (newTask.get('title')?.errors?.['required']) {
@@ -89,7 +89,8 @@
         <!--Description-->
         <div class="form-group">
             <label for="description-edit" class="form-label">Description</label>
-            <textarea class="form-input" formControlName="description" placeholder="Add description"></textarea>
+            <textarea autocomplete="off" class="form-input" formControlName="description"
+                placeholder="Add description"></textarea>
             @if (newTask.get('description')?.touched && newTask.get('description')?.invalid) {
             <div class="error">
                 @if (newTask.get('description')?.errors?.['required']) {
@@ -118,7 +119,7 @@
         <!--Due Date-->
         <div class="form-group">
             <label for="due_edit">Due Date</label>
-            <input id="due_edit" type="date" formControlName="due" class="form-input" />
+            <input autocomplete="off" id="due_edit" type="date" formControlName="due" class="form-input" />
             @if (newTask.get('due')?.touched && newTask.get('due')?.invalid) {
             <div class="error">
                 @if (newTask.get('due')?.errors?.['required']) {
