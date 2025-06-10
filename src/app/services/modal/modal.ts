@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Category } from '../../models/category.model';
+import { Task } from '../../models/task.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,7 @@ export class ModalService {
   showCategoryModal = false
   showTaskModal = false
   modalType: 'edit' | 'add' | null = null;
+  editingTask: Task | null = null;
 
   private modalCategorySubject = new BehaviorSubject<Category | null>(null);
   public modalCategory$ = this.modalCategorySubject.asObservable();
@@ -32,7 +34,8 @@ export class ModalService {
     console.log('Add modal opened');
   }
   // Handle Tasks
-  showEditTask() {
+  showEditTask(task: Task) {
+    this.editingTask = task;
     this.modalType = 'edit';
     this.showTaskModal = true;
     console.log('Edit modal opened');

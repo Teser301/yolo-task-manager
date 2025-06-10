@@ -17,36 +17,9 @@
       font-size: 0.95rem;
       margin-bottom: 1rem;
     }
-    button {
-      background-color: #2563eb;
-
-      &:hover {
-        background-color: #3b82f6;
-      }
-    }
-
-    .delete-btn,
-    .edit-btn {
-      color: white;
-      padding: 0.4rem 0.75rem;
-      margin-left: 0.5rem;
-    }
-    .delete-btn {
-      background-color: #dc2626;
-      &:hover {
-        background-color: #ef4444;
-      }
-    }
-    .edit-btn {
-      background-color: #2638dc;
-      &:hover {
-        background-color: #4488ef;
-      }
-    }
   }
-
-  app-task-card {
-    display: block;
-    margin-top: 1rem;
+  .category-buttons {
+    display: flex;
+    gap: 10px;
   }
 }

@@ -37,7 +37,7 @@ export class Home {
   handleCategoryDeleted(id: number) {
     this.categoryService.deleteCategory(id).subscribe();
   }
-  handleEdit(category: Category) {
+  handleCategoryEdit(category: Category) {
     this.modalService.showEditCategory(category);
   }
 

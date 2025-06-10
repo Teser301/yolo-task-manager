@@ -3,11 +3,11 @@
         <div>
             <h3>{{ category().title }}</h3>
             <p>{{ category().description }}</p>
-            <button routerLink="/category/{{category().id}}">View Category</button>
         </div>
-        <div>
-            <button class="delete-btn" (click)="onDelete()">Delete</button>
-            <button class="edit-btn" (click)="onEdit()">Edit</button>
+        <div class="category-buttons">
+            <button class="btn-primary" routerLink="/category/{{category().id}}">View Category</button>
+            <button class="btn-danger" (click)="onDelete()">Delete</button>
+            <button class="btn-info" (click)="onEdit()">Edit</button>
         </div>
     </div>
     @for (task of category().tasks; track task.id) {
