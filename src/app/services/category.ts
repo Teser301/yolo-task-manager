@@ -84,14 +84,25 @@ export class CategoryService {
     );
   }
 
-  // Modify
-
-
-  // deleteTask(categoryId: number, taskId: number): Observable<void> {
-  //   return this.http.delete<void>(`${this.apiUrl}/categories/${categoryId}/tasks/${taskId}`).pipe(
-  //     tap(() => this.refreshCategories())
-  //   );
+  // editCategory(id: number, category: Category): Observable<Category> {
+  //   const url = `${this.apiUrl}/categories/${id}`
+  //   return this.http.put<Category>(url, category).pipe()
   // }
+  editCategory(id: number, category: Category): Observable<Category> {
+    const url = `${this.apiUrl}/categories/${id}`;
+    const current = this.categoriesSubject.value;
 
+    // Optimistic update
+    this.categoriesSubject.next(
+      current.map(c => c.id === id ? { ...c, ...category } : c)
+    );
 
+    return this.http.put<Category>(url, category).pipe(
+      catchError(err => {
+        // Revert on error
+        this.categoriesSubject.next(current);
+        return throwError(() => err);
+      })
+    );
+  }
 }

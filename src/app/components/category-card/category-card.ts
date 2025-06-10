@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { Category } from '../../models/category.model';
 import { TaskCard } from '../task-card/task-card';
 import { CategoryService } from '../../services/category';
+import { ModalService } from '../../services/modal/modal';
 
 @Component({
   selector: 'app-category-card',
@@ -15,7 +16,10 @@ export class CategoryCard {
   categoryDeleted = output<number>();
   edit = output<Category>();
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(
+    private categoryService: CategoryService,
+    public modalService: ModalService
+  ) { }
 
   onDelete() {
     if (confirm('Are you sure?')) {
@@ -29,5 +33,6 @@ export class CategoryCard {
 
   onEdit() {
     this.edit.emit(this.category());
+    this.modalService.showEditCategory();
   }
 }

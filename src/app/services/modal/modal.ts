@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { Category } from '../../models/category.model';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +10,22 @@ export class ModalService {
   showTaskModal = false
   modalType: 'edit' | 'add' | null = null;
 
+  private modalCategorySubject = new BehaviorSubject<Category | null>(null);
+  public modalCategory$ = this.modalCategorySubject.asObservable();
+
+  getCurrentModalCategory(): Category | null {
+    return this.modalCategorySubject.value;
+  }
   // Handle Categories
-  showEditCategory() {
+  showEditCategory(category?: Category) {
     this.modalType = 'edit';
     this.showCategoryModal = true;
+    if (category) {
+      this.modalCategorySubject.next(category);
+    }
     console.log('Edit modal opened');
   }
+
   showAddCategory() {
     this.modalType = 'add';
     this.showCategoryModal = true;
@@ -34,6 +46,7 @@ export class ModalService {
   closeModal() {
     this.showCategoryModal = false;
     this.modalType = null;
+    this.modalCategorySubject.next(null);
     console.log('Modal closed');
   }
   constructor() { }

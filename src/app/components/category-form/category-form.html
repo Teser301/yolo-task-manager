@@ -1,0 +1,23 @@
+@if (modalService.modalType == "add") {
+<h2>Add New Category</h2>
+<form [formGroup]="newCategory" (ngSubmit)="onSubmit()">
+    <input formControlName="title" placeholder="Title" />
+    <textarea formControlName="description" placeholder="Add description"></textarea>
+    <div class=" modal-actions">
+        <button class="btn-primary" type="submit">Create</button>
+        <button class="btn-danger" type="button" (click)="modalService.closeModal()">Cancel</button>
+    </div>
+</form>
+}
+@if (modalService.modalType == "edit") {
+<h2>Modifying a category!</h2>
+<form [formGroup]="editCategory" (ngSubmit)="onEditSubmit()">
+    <input formControlName="title" placeholder="Title" />
+    <textarea formControlName="description" placeholder="Description"></textarea>
+
+    <div class="modal-actions">
+        <button type="submit">Save Changes</button>
+        <button type="button" (click)="modalService.closeModal()">Cancel</button>
+    </div>
+</form>
+}
