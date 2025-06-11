@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+@use "./variables";
+
 html,
 body {
-  background-color: #0f172a; // A rich dark navy/blue-gray
+  background-color: variables.$color-b; // A rich dark navy/blue-gray
   margin: 0;
   padding: 0;
   height: 100%;
@@ -9,7 +11,7 @@ body {
 }
 
 button {
-  color: white;
+  color: variables.$color-w;
   border: none;
   font-size: 0.85rem;
   padding: 0.6rem 1.2rem;
@@ -19,28 +21,28 @@ button {
   cursor: pointer;
   transition: background-color 0.2s ease;
   &.btn-primary {
-    background-color: #44a31e;
+    background-color: variables.$color-p;
     &:hover {
-      background-color: #5be026;
+      background-color: variables.$color-p-l;
     }
   }
 
   &.btn-secondary {
-    background-color: #374151;
+    background-color: variables.$color-s;
     &:hover {
-      background-color: #4b5563;
+      background-color: variables.$color-s-l;
     }
   }
   &.btn-info {
-    background-color: #2563eb;
+    background-color: variables.$color-a;
     &:hover {
-      background-color: #3b82f6;
+      background-color: variables.$color-a-l;
     }
   }
   &.btn-danger {
-    background-color: #dc2626;
+    background-color: variables.$color-d;
     &:hover {
-      background-color: #ef4444;
+      background-color: variables.$color-d-l;
     }
   }
 }

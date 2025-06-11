@@ -1,58 +1,64 @@
+@use "../../../sass/variables";
+
 .category-view {
-  background-color: #1f2937; // Matches dark theme
-  color: #e5e7eb;
+  background-color: variables.$color-b-l; // Matches dark theme
+  color: variables.$color-w;
   padding: 2rem;
-  max-width: 800px;
   margin: 2rem auto;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-  font-family: "Inter", sans-serif;
-  .category-header {
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  .category-content {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
-  .category-title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #f9fafb;
+  .category-header {
+    .category-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: variables.$color-w;
+    }
+    .category-description,
+    .category-subtext {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      color: variables.$color-w;
+    }
   }
 
-  .category-description,
-  .category-subtext {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: #cbd5e1;
-  }
-
-  .tasks {
-    background-color: #111827;
+  .category-tasks {
+    background-color: variables.$color-g-d;
     padding: 1rem;
     border-radius: 10px;
     margin-bottom: 1.5rem;
     .title {
       font-size: 1.2rem;
-      color: #facc15; // accent color (gold/yellow)
-    }
-
-    app-task-card {
-      display: block;
-      margin-bottom: 1rem;
+      color: variables.$color-a;
     }
   }
 
-  .footer-buttons {
+  .category-actions {
+    margin-top: 2rem;
     display: flex;
-    gap: 10;
+    justify-content: space-between;
+    gap: 1rem;
+    .category-editor {
+      display: flex;
+      gap: 1rem;
+    }
   }
+
   .category-error {
     text-align: center;
     h1 {
       font-size: 1.8rem;
-      color: #f87171;
-      margin-bottom: 0.5rem;
-    }
-    p {
-      color: #94a3b8;
+      color: variables.$color-d;
     }
   }
 }

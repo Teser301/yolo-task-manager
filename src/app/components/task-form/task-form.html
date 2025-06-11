@@ -1,7 +1,12 @@
-<div>
+<section>
+    <div class="form-header">
+        <h2 class="form-title">
+            {{ modalService.modalType === 'add' ? 'Add New Task' : 'Edit Task' }}
+        </h2>
+        <button class="btn-danger" (click)="modalService.closeModal()">X</button>
+    </div>
     @if (modalService.modalType == "add") {
-    <h2 class="form-title">Add New Task</h2>
-    <form [formGroup]="newTask" class="task-form" (ngSubmit)="onCreateSubmit()">
+    <form [formGroup]="newTask" (ngSubmit)="onCreateSubmit()" class="form-container">
         <!--Title-->
         <div class="form-group">
             <label for="title-add" class="form-label">Title</label>
@@ -142,4 +147,4 @@
         </div>
     </form>
     }
-</div>
+</section>

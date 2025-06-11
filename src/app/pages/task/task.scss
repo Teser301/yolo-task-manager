@@ -1,12 +1,13 @@
+@use "../../../sass/variables";
+
 .task-view {
-  background-color: #0f172a;
+  background-color: variables.$color-b-l;
   padding: 2rem;
   border-radius: 12px;
-  color: #e2e8f0;
+  color: variables.$color-w;
   max-width: 700px;
   margin: 2rem auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
   .task-header {
     text-align: center;
@@ -16,14 +17,14 @@
   .task-view-title {
     font-size: 2.25rem;
     font-weight: 600;
-    color: #f1f5f9;
+    color: variables.$color-w;
   }
 
   .task-detail {
-    background-color: #1e293b;
+    background-color: variables.$color-b-l;
     padding: 1.75rem;
     border-radius: 10px;
-    border: 1px solid #334155;
+    border: 1px solid variables.$color-g-d;
 
     .task-info-group {
       display: flex;
@@ -33,16 +34,18 @@
 
       .task-info-item {
         margin-bottom: 0.5rem;
-
-        .info-label {
+        span {
           display: block;
           font-size: 0.875rem;
-          color: #94a3b8;
+          color: variables.$color-w;
           margin-bottom: 0.25rem;
+        }
+        .info-label {
+          font-weight: 600;
+          font-size: 1rem;
         }
 
         .info-value {
-          font-size: 1rem;
           font-weight: 500;
           &.category {
             color: #c084fc; // violet
@@ -55,62 +58,51 @@
       font-size: 1.75rem;
       font-weight: 600;
       margin-bottom: 1rem;
-      color: #f8fafc;
+      color: variables.$color-w;
     }
 
     .task-description {
       .description-title {
         font-size: 1.25rem;
         margin-bottom: 0.5rem;
-        color: #f1f5f9;
+        color: variables.$color-w;
       }
 
       .description-text {
         font-size: 1rem;
         line-height: 1.6;
-        color: #cbd5e1;
+        color: variables.$color-w;
       }
     }
 
     .task-actions {
       margin-top: 2rem;
       display: flex;
-      flex-wrap: wrap;
+      justify-content: space-between;
       gap: 1rem;
-
-      .btn {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background 0.2s ease;
+      .task-editor {
+        display: flex;
+        gap: 1rem;
       }
     }
   }
 
   .task-not-found {
     text-align: center;
-    color: #f87171;
+    color: variables.$color-d;
     font-size: 1.2rem;
     padding: 2rem;
-    background-color: #1e293b;
+    background-color: variables.$color-b;
     border-radius: 10px;
-
-    i.icon-warning {
-      font-size: 2rem;
-      color: #f87171;
-      margin-bottom: 1rem;
-      display: block;
-    }
 
     h3 {
       margin-bottom: 0.5rem;
-      color: #f1f5f9;
+      color: variables.$color-w;
     }
 
     p {
       margin-bottom: 1.5rem;
-      color: #cbd5e1;
+      color: variables.$color-w;
     }
   }
 }
