@@ -1,17 +1,54 @@
 <section class="task-view">
-    <h1 class="task-view-title">Task View</h1>
+    <div class="task-header">
+        <h1 class="task-view-title">Task Details</h1>
+        @if (task && category) {
+        <div class="task-badge" [style.background]="getStatusColor(task.status)">
+            {{ getStatusText(task.status) }}
+        </div>
+        }
+    </div>
 
     @if (task && category) {
     <div class="task-detail">
-        <h2 class="task-title">{{ task.title }}</h2>
-        <p class="task-meta">Status: <span class="status">{{ task.status }}</span></p>
-        <p class="task-meta">Category: <span class="category-name">{{ category.title }}</span></p>
+        <div class="task-info-group">
+            <div class="task-info-item">
+                <span class="info-label">Category</span>
+                <span class="info-value category">{{ category.title }}</span>
+            </div>
+            <div class="task-info-item">
+                <span class="info-label">Due Date</span>
+                <span class="info-value">{{ formatDate(task.due) }}</span>
+            </div>
+        </div>
+
+        <div class="task-content">
+            <h2 class="task-title">{{ task.title }}</h2>
+            <div class="task-description">
+                <h3 class="description-title">Description</h3>
+                <p class="description-text">{{ task.description }}</p>
+            </div>
+        </div>
+
         <div class="task-actions">
-            <button class="btn btn-delete" (click)="onDeleteTask()">Delete</button>
-            <button class="btn btn-back" (click)="returnToCategory()">Back</button>
+            <!-- <button class="btn btn-edit" (click)="onEditTask()">
+                 Edit
+            </button> -->
+            <button class="btn btn-danger" (click)="onDeleteTask()">
+                Delete
+            </button>
+            <button class="btn btn-secondary" (click)="returnToCategory()">
+                Back to Category
+            </button>
         </div>
     </div>
     } @else {
-    <p class="task-not-found">Task not found</p>
+    <div class="task-not-found">
+        <i class="icon-warning"></i>
+        <h3>Task Not Found</h3>
+        <p>This task could not be found or may have been deleted.</p>
+        <button class="btn btn-back" (click)="returnToCategory()">
+            Return to Category
+        </button>
+    </div>
     }
 </section>
