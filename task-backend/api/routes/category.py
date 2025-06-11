@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from database.db import get_db
-from api.models.category import  CategoryBase, CategoryWithId
+from api.models.category import  CategoryBase, CategoryUpdate, CategoryWithId
 from api.crud import category as crud_category
 
 router = APIRouter(prefix="/categories", tags=["categories"])
@@ -23,9 +23,9 @@ def read_category(category_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Category not found")
     return db_category
 
-@router.put("/{id}", response_model=CategoryWithId)
-def update_category(id: int, category_update: CategoryBase, db: Session = Depends(get_db)):
-    db_category = crud_category.update_category(db=db, category_id=id, category_update=category_update)
+@router.put("/{category_id}", response_model=CategoryWithId)
+def update_category(category_id: int, category_update: CategoryUpdate, db: Session = Depends(get_db)):
+    db_category = crud_category.update_category(db=db, category_id=category_id, category_update=category_update)
     if db_category is None:
         raise HTTPException(status_code=404, detail="Category not found")
     return db_category

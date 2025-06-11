@@ -10,4 +10,4 @@ class Category(Base):
     title = Column(String, unique=True, index=True)
     description = Column(String, nullable=True)
 
-    tasks = relationship("Task" )
+    tasks = relationship("Task", back_populates="category", cascade="all, delete-orphan")

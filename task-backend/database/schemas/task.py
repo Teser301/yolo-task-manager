@@ -19,6 +19,7 @@ class Task(Base):
     status = Column(Integer, nullable=False)
     due = Column(DateTime, default=datetime.utcnow)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
+    category = relationship("Category", back_populates="tasks")
     __table_args__ = (
         CheckConstraint("status IN (1, 2, 3)", name='check_status'),
     )
