@@ -40,9 +40,11 @@ export class Home {
       error: (err) => console.error('Failed to refresh categories', err)
     });
   }
+
   onCreateCategory() {
     this.modalService.showAddCategory();
   }
+
   onCreateTask() {
     if (this.categories.length === 0) {
       console.warn('No categories exist - this button should be hidden');
@@ -62,5 +64,17 @@ export class Home {
 
   handleCategoryEdit(category: Category) {
     this.modalService.showEditCategory(category);
+  }
+
+  handleTaskDeleted(event: { taskId: number, categoryId: number }) {
+    this.categories = this.categories.map(category => {
+      if (category.id === event.categoryId) {
+        return {
+          ...category,
+          tasks: category.tasks?.filter(task => task.id !== event.taskId) || []
+        };
+      }
+      return category;
+    });
   }
 }

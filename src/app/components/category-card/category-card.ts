@@ -15,7 +15,7 @@ export class CategoryCard {
   category = input.required<Category>();
   categoryDeleted = output<number>();
   edit = output<Category>();
-
+  taskDeleted = output<{ taskId: number, categoryId: number }>();
   constructor(
     private categoryService: CategoryService,
     public modalService: ModalService
@@ -33,6 +33,13 @@ export class CategoryCard {
 
   onEdit() {
     this.edit.emit(this.category());
-    this.modalService.showEditCategory();
+    this.modalService.showEditCategory(this.category());
+  }
+
+  handleTaskDeleted(deletedTaskId: number) {
+    this.taskDeleted.emit({
+      taskId: deletedTaskId,
+      categoryId: this.category().id
+    });
   }
 }

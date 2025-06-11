@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Task } from '../../models/task.model';
 import { CategoryService } from '../category/category';
@@ -14,7 +14,22 @@ export class TaskService {
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   public tasks$ = this.tasksSubject.asObservable();
 
-  constructor(private categoryService: CategoryService) { }
+
+
+
+  private loadAllTasks(): void {
+    this.http.get<Task[]>(`${this.apiUrl}/tasks`).pipe(
+      catchError(err => {
+        console.error('Error loading tasks', err);
+        return of([]);
+      })
+    ).subscribe(tasks => this.tasksSubject.next(tasks));
+  }
+
+  // Call this in your service constructor
+  constructor(private categoryService: CategoryService) {
+    this.loadAllTasks();
+  }
 
   getTasks(): Observable<Task[]> {
     return this.http.get<Task[]>(`${this.apiUrl}/tasks`).pipe(
@@ -32,11 +47,7 @@ export class TaskService {
 
   createNewTask(task: Task): Observable<Task> {
     return this.http.post<Task>(`${this.apiUrl}/tasks`, task).pipe(
-      tap(realTask => {
-        const current = this.tasksSubject.value;
-        this.tasksSubject.next([...current, realTask]);
-        this.categoryService.getCategories().subscribe();
-      }),
+      tap(() => this.loadAllTasks()), // Refresh the complete list
       catchError(err => {
         console.error('Task creation failed:', err);
         return throwError(() => err);
@@ -44,21 +55,23 @@ export class TaskService {
     );
   }
 
-
   deleteTask(id: number): Observable<void> {
-    const current = this.tasksSubject.value;
-    this.tasksSubject.next(current.filter(t => t.id !== id));
-
     return this.http.delete<void>(`${this.apiUrl}/tasks/${id}`).pipe(
       tap(() => {
+        // Update the BehaviorSubject
+        const currentTasks = this.tasksSubject.value;
+        this.tasksSubject.next(currentTasks.filter(task => task.id !== id));
+
+        // Refresh categories if needed
         this.categoryService.getCategories().subscribe();
       }),
       catchError(err => {
-        this.tasksSubject.next(current);
+        console.error('Error deleting task:', err);
         return throwError(() => err);
       })
     );
   }
+
   editTask(id: number, updatedTask: Task): Observable<Task> {
     // Format the due date if it exists
     const taskToSend = {

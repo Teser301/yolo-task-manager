@@ -45,12 +45,7 @@ export class TaskView {
     });
   }
   onDeleteTask(): void {
-    // if (!this.category || !this.task) return;
 
-    // if (confirm('Are you sure you want to delete this task?')) {
-    //   this.categoryService.deleteTask(this.category.id, this.task.id);
-    //   this.router.navigate(['/category', this.category.id]); // Redirect back to category
-    // }
   }
   returnToCategory() {
     const categoryId = this.route.parent?.snapshot.paramMap.get('categoryId');

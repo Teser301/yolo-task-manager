@@ -10,7 +10,9 @@ export class ModalService {
   showCategoryModal = false
   showTaskModal = false
   modalType: 'edit' | 'add' | null = null;
+
   editingTask: Task | null = null;
+  preselectedCategoryId: number | null = null;
 
   private modalCategorySubject = new BehaviorSubject<Category | null>(null);
   public modalCategory$ = this.modalCategorySubject.asObservable();
@@ -40,9 +42,10 @@ export class ModalService {
     this.showTaskModal = true;
     console.log('Edit modal opened');
   }
-  showAddTask() {
+  showAddTask(categoryId?: number) {
     this.modalType = 'add';
     this.showTaskModal = true;
+    this.preselectedCategoryId = categoryId || null;
     console.log('Add modal opened');
   }
   // Shared

@@ -40,33 +40,40 @@ export class TaskForm implements OnInit {
   }
   ngOnInit() {
     this.fetchCategories();
-
-    // Watch for when the modal opens with edit mode
     this.checkForEditMode();
+    this.setPreselectedCategory();
   }
-  checkForEditMode() {
-    // When modal opens in edit mode, populate the edit form
-    if (this.modalService.modalType === 'edit' && this.modalService.editingTask) {
-      this.populateEditForm(this.modalService.editingTask);
+  setPreselectedCategory() {
+    if (this.modalService.modalType === 'add' && this.modalService.preselectedCategoryId) {
+      this.newTask.patchValue({
+        category_id: this.modalService.preselectedCategoryId
+      });
     }
   }
+  // If edit, fill inputs
+  checkForEditMode() {
+    const { modalType, editingTask } = this.modalService;
+    if (modalType === 'edit' && editingTask) {
+      const formattedDate = editingTask.due
+        ? new Date(editingTask.due).toISOString().split('T')[0]
+        : this.getToday();
 
-  populateEditForm(task: Task) {
-    // Format the date for the input field
-    const formattedDate = task.due ? new Date(task.due).toISOString().split('T')[0] : this.getToday();
-
-    this.editTask.patchValue({
-      title: task.title,
-      description: task.description,
-      status: task.status, // Convert to string for select
-      due: formattedDate,
-      category_id: task.category_id
-    });
+      this.editTask.patchValue({
+        title: editingTask.title,
+        description: editingTask.description,
+        status: editingTask.status,
+        due: formattedDate,
+        category_id: editingTask.category_id
+      });
+    }
   }
+  // Get today for inputs
   getToday(): string {
     const today = new Date();
     return today.toISOString().split('T')[0];
   }
+
+  // Get
   fetchCategories() {
     this.categoryService.getCategories().subscribe({
       next: (categories) => {
@@ -77,7 +84,7 @@ export class TaskForm implements OnInit {
       }
     });
   }
-
+  // Create
   onCreateSubmit() {
     if (this.newTask.valid) {
       const formData: Task = {
@@ -100,7 +107,7 @@ export class TaskForm implements OnInit {
       });
     }
   }
-
+  // Edit
   onEditSubmit() {
     if (this.editTask.valid && this.modalService.editingTask) {
       const formData: Task = {

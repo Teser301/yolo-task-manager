@@ -11,7 +11,7 @@
     <div class="category-list">
         @for (category of categories; track category.id) {
         <app-category-card [category]="category" (categoryDeleted)="handleCategoryDeleted($event)"
-            (edit)="handleCategoryEdit($event)" />
+            (edit)="handleCategoryEdit($event)" (taskDeleted)="handleTaskDeleted($event)" />
         }
     </div>
 </div>

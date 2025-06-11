@@ -24,8 +24,13 @@ export class TaskCard {
   onDelete() {
     if (confirm('Are you sure you want to delete this task?')) {
       this.taskService.deleteTask(this.task().id).subscribe({
-        next: () => this.taskDeleted.emit(this.task().id),
-        error: () => alert('Failed to delete task')
+        next: () => {
+          this.taskDeleted.emit(this.task().id);
+        },
+        error: (err) => {
+          console.error('Failed to delete task:', err);
+          alert('Failed to delete task. Please try again.');
+        }
       });
     }
   }

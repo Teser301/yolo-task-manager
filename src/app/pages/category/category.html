@@ -8,6 +8,7 @@
                 <p class="category-subtext">Following tasks assigned to this are:</p>
             </div>
             <div>
+                <button class="btn-primary" (click)="handleTaskAdd(category.id)">Add Task</button>
                 <button class="btn-primary" (click)="handleCategoryEdit(category.id)">Edit Category</button>
             </div>
         </div>
@@ -15,7 +16,7 @@
         <div class="tasks">
             <h3 class="title">Tasks ({{ category.tasks.length }})</h3>
             @for (task of category.tasks; track task.id) {
-            <app-task-card [task]="task" [category]="category" />
+            <app-task-card [task]="task" [category]="category" (taskDeleted)="handleTaskDeleted($event)" />
             }
         </div>
     </div>
