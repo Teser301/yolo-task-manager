@@ -13,8 +13,7 @@ import { Category } from '../../models/category.model';
   styleUrl: './task-form.scss'
 })
 export class TaskForm implements OnInit {
-  newTask: FormGroup;
-  editTask: FormGroup;
+  taskForm: FormGroup;
   categories: Category[] = [];
 
   private taskService = inject(TaskService);
@@ -23,29 +22,78 @@ export class TaskForm implements OnInit {
     public modalService: ModalService,
     private fb: FormBuilder
   ) {
-    this.newTask = this.fb.group({
+    this.taskForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', [Validators.required]],
       status: [1, [Validators.required]],
       due: [this.getToday(), [Validators.required]],
       category_id: ['', [Validators.required]]
     })
-    this.editTask = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', [Validators.required]],
-      status: [1, [Validators.required]],
-      due: [this.getToday(), [Validators.required]],
-      category_id: ['', [Validators.required]]
-    })
+
   }
   ngOnInit() {
     this.fetchCategories();
     this.checkForEditMode();
     this.setPreselectedCategory();
   }
+
+  onSubmit() {
+    if (this.taskForm.valid) {
+      if (this.modalService.modalType === 'add') {
+        this.createTask();
+      } else {
+        this.editTask();
+      }
+    } else {
+      console.log('Form is invalid - Errors:', this.taskForm.errors);
+    }
+  }
+  private createTask() {
+    const formData: Task = this.taskForm.value;
+
+    this.taskService.createNewTask(formData).subscribe({
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError('creating', err)
+    });
+  }
+  // Edit
+  private editTask() {
+    if (!this.modalService.editingTask) return;
+
+    const formData: Task = {
+      ...this.modalService.editingTask,
+      ...this.taskForm.value
+    };
+
+    this.taskService.editTask(this.modalService.editingTask.id, formData).subscribe({
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError('updating', err)
+    });
+  }
+  private handleSuccess() {
+    this.modalService.closeModal();
+    this.resetForm();
+  }
+  private resetForm() {
+    this.taskForm.reset({
+      status: 1,
+      due: this.getToday()
+    });
+  }
+
+  private markAllAsTouched() {
+    Object.values(this.taskForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+  }
+  private handleError(action: string, err: any) {
+    console.error(`Error ${action} task:`, err);
+    alert(`Failed to ${action} task. Please try again.`);
+  }
+
   setPreselectedCategory() {
     if (this.modalService.modalType === 'add' && this.modalService.preselectedCategoryId) {
-      this.newTask.patchValue({
+      this.taskForm.patchValue({
         category_id: this.modalService.preselectedCategoryId
       });
     }
@@ -58,7 +106,7 @@ export class TaskForm implements OnInit {
         ? new Date(editingTask.due).toISOString().split('T')[0]
         : this.getToday();
 
-      this.editTask.patchValue({
+      this.taskForm.patchValue({
         title: editingTask.title,
         description: editingTask.description,
         status: editingTask.status,
@@ -84,57 +132,5 @@ export class TaskForm implements OnInit {
       }
     });
   }
-  // Create
-  onCreateSubmit() {
-    if (this.newTask.valid) {
-      const formData: Task = {
-        ...this.newTask.value,
-      };
 
-      this.taskService.createNewTask(formData).subscribe({
-        next: () => {
-          this.modalService.closeModal();
-          this.newTask.reset();
-        },
-        error: (err) => {
-          console.error('Error creating task:', err);
-        }
-      });
-    } else {
-      // Touch all controls to trigger error messages
-      Object.values(this.newTask.controls).forEach(control => {
-        control.markAsTouched();
-      });
-    }
-  }
-  // Edit
-  onEditSubmit() {
-    if (this.editTask.valid && this.modalService.editingTask) {
-      const formData: Task = {
-        ...this.modalService.editingTask,
-        ...this.editTask.value,
-      };
-
-      this.taskService.editTask(this.modalService.editingTask.id, formData).subscribe({
-        next: () => {
-          this.modalService.closeModal();
-          this.editTask.reset();
-          // Reset to default values
-          this.editTask.patchValue({
-            status: 1,
-            due: this.getToday()
-          });
-        },
-        error: (err) => {
-          console.error('Error updating task:', err);
-          alert('Failed to update task. Please try again.');
-        }
-      });
-    } else {
-      // Touch all controls to trigger error messages
-      Object.values(this.editTask.controls).forEach(control => {
-        control.markAsTouched();
-      });
-    }
-  }
 }

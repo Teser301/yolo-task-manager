@@ -11,8 +11,7 @@ import { CategoryService } from '../../services/category/category';
   styleUrl: './category-form.scss'
 })
 export class CategoryForm {
-  newCategory: FormGroup;
-  editCategory: FormGroup;
+  categoryForm: FormGroup;
   isSubmitting: boolean = false;
   private categoryService = inject(CategoryService);
 
@@ -20,11 +19,7 @@ export class CategoryForm {
     public modalService: ModalService,
     private fb: FormBuilder
   ) {
-    this.newCategory = this.fb.group({
-      title: ['', Validators.required],
-      description: ['', [Validators.required]]
-    });
-    this.editCategory = this.fb.group({
+    this.categoryForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', [Validators.required]]
     });
@@ -33,57 +28,63 @@ export class CategoryForm {
   ngOnInit() {
     this.modalService.modalCategory$.subscribe(category => {
       if (category && this.modalService.modalType === 'edit') {
-        this.editCategory.patchValue({
+        this.categoryForm.patchValue({
           title: category.title,
           description: category.description
         });
+      } else if (this.modalService.modalType === 'add') {
+        this.categoryForm.reset();
       }
     });
   }
-  // Create Category
-  onCreateSubmit() {
-    if (this.newCategory.valid && !this.isSubmitting) {
-      this.isSubmitting = true;
-      const formData: Category = {
-        ...this.newCategory.value,
-        tasks: []
-      };
-
-      this.categoryService.createNewCategory(formData).subscribe({
-        next: () => {
-          this.isSubmitting = false;
-          this.modalService.closeModal();
-          this.newCategory.reset();
-        },
-        error: (err) => {
-          this.isSubmitting = false;
-          console.error('Error creating category:', err);
-        }
-      });
+  onSubmit() {
+    if (this.categoryForm.valid) {
+      if (this.modalService.modalType === 'add') {
+        this.createCategory();
+      } else {
+        this.editCategory();
+      }
     } else {
-      console.log('Form is invalid - Errors:', this.newCategory.errors);
-      console.log('Title errors:', this.newCategory.get('title')?.errors);
-      console.log('Message errors:', this.newCategory.get('message')?.errors);
+      console.log('Form is invalid - Errors:', this.categoryForm.errors);
     }
   }
+  // Create Category
+  createCategory() {
+    this.isSubmitting = true;
+    const formData: Category = {
+      ...this.categoryForm.value,
+      tasks: []
+    };
+
+    this.categoryService.createNewCategory(formData).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.modalService.closeModal();
+        this.categoryForm.reset();
+      },
+      error: (err) => {
+        this.isSubmitting = false;
+        console.error('Error creating category:', err);
+      }
+    });
+
+  }
   // Edit Category
-  onEditSubmit() {
-    if (this.editCategory.valid) {
-      const currentCategory = this.modalService.getCurrentModalCategory();
+  editCategory() {
+    const currentCategory = this.modalService.getCurrentModalCategory();
 
-      if (!currentCategory) return;
-      const formData: Category = {
-        ...currentCategory,
-        ...this.editCategory.value
-      };
+    if (!currentCategory) return;
+    const formData: Category = {
+      ...currentCategory,
+      ...this.categoryForm.value
+    };
 
-      this.categoryService.editCategory(currentCategory.id, formData).subscribe({
-        next: () => {
-          this.modalService.closeModal();
-          this.editCategory.reset();
-        },
-        error: (err) => console.error('Error editing category:', err)
-      });
-    }
+    this.categoryService.editCategory(currentCategory.id, formData).subscribe({
+      next: () => {
+        this.modalService.closeModal();
+        this.categoryForm.reset();
+      },
+      error: (err) => console.error('Error editing category:', err)
+    });
   }
 }

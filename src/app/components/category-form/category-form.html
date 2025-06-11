@@ -1,40 +1,26 @@
-<section>
+<div>
     <div class="form-header">
         <h2 class="form-title">
             {{ modalService.modalType === 'add' ? 'Add New Category' : 'Edit Category' }}
         </h2>
         <button class="btn-danger" (click)="modalService.closeModal()">X</button>
     </div>
-    @if (modalService.modalType == "add") {
-    <form [formGroup]="newCategory" (ngSubmit)="onCreateSubmit()" class="form-container">
+
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="form-container">
         <div class="form-group">
-            <label for="title-add" class="form-label">Title</label>
-            <input id="title-add" formControlName="title" placeholder="Title" class="form-input" />
+            <label [for]="modalService.modalType + '-title'" class="form-label">Title</label>
+            <input [id]="modalService.modalType + '-title'" formControlName="title" placeholder="Title"
+                class="form-input" autocomplete="off" />
         </div>
         <div class="form-group">
-            <label for="description-add" class="form-label">Description</label>
-            <textarea id="description-add" formControlName="description" placeholder="Add description"
-                class="form-textarea"></textarea>
+            <label [for]="modalService.modalType + '-description'" class="form-label">Description</label>
+            <textarea [id]="modalService.modalType + '-description'" formControlName="description"
+                placeholder="Add description" class="form-textarea" autocomplete="off"></textarea>
         </div>
         <div class="form-actions">
-            <button class="btn-primary" type="submit">Create</button>
+            <button class="btn-primary" type="submit" [disabled]="isSubmitting">
+                {{ modalService.modalType === 'add' ? 'Create' : 'Save Changes' }}
+            </button>
         </div>
     </form>
-    }
-    @if (modalService.modalType == "edit") {
-    <form [formGroup]="editCategory" (ngSubmit)="onEditSubmit()" class="form-container">
-        <div class="form-group">
-            <label for="title-edit" class="form-label">Title</label>
-            <input id="title-edit" formControlName="title" placeholder="Title" class="form-input" autocomplete="off" />
-        </div>
-        <div class="form-group">
-            <label for="description-edit" class="form-label">Description</label>
-            <textarea id="description-edit" formControlName="description" placeholder="Add description"
-                class="form-textarea" autocomplete="off"></textarea>
-        </div>
-        <div class="form-actions">
-            <button class="btn-primary" type="submit">Save Changes</button>
-        </div>
-    </form>
-    }
-</section>
+</div>
