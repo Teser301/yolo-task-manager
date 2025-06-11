@@ -14,8 +14,9 @@ export class TaskService {
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   public tasks$ = this.tasksSubject.asObservable();
 
-
-
+  constructor(private categoryService: CategoryService) {
+    this.loadAllTasks();
+  }
 
   private loadAllTasks(): void {
     this.http.get<Task[]>(`${this.apiUrl}/tasks`).pipe(
@@ -24,11 +25,6 @@ export class TaskService {
         return of([]);
       })
     ).subscribe(tasks => this.tasksSubject.next(tasks));
-  }
-
-  // Call this in your service constructor
-  constructor(private categoryService: CategoryService) {
-    this.loadAllTasks();
   }
 
   getTasks(): Observable<Task[]> {

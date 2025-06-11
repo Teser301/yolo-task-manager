@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CategoryService } from '../../services/category/category';
 import { Router } from '@angular/router';
 import { TaskService } from '../../services/task/task';
+import { ModalService } from '../../services/modal/modal';
 
 @Component({
   selector: 'app-task',
@@ -20,7 +21,7 @@ export class TaskView {
   loading = true;
   error: string | null = null;
 
-
+  private modalService = inject(ModalService);
   private categoryService = inject(CategoryService);
   private taskService = inject(TaskService);
   private route = inject(ActivatedRoute);
@@ -28,7 +29,10 @@ export class TaskView {
 
   ngOnInit() {
     this.loadTaskData();
+    this.setupTaskUpdates();
   }
+
+  // Setters/Getters
   private loadTaskData(): void {
     const categoryId = Number(this.route.parent?.snapshot.paramMap.get('categoryId'));
     const taskId = Number(this.route.snapshot.paramMap.get('taskId'));
@@ -38,7 +42,6 @@ export class TaskView {
       this.loading = false;
       return;
     }
-
     this.categoryService.getCategoryById(categoryId).subscribe({
       next: (category) => {
         this.category = category;
@@ -57,6 +60,24 @@ export class TaskView {
       }
     });
   }
+  private setupTaskUpdates() {
+    this.taskService.tasks$.subscribe(tasks => {
+      if (this.task) {
+        // Find the updated version of our current task
+        const updatedTask = tasks.find(t => t.id === this.task?.id);
+        if (updatedTask) {
+          this.task = updatedTask;
+        }
+      }
+    });
+  }
+  // Handlers
+  onEditTask(): void {
+    if (!this.task) {
+      return;
+    }
+    this.modalService.showEditTask(this.task);
+  }
   onDeleteTask(): void {
     if (!this.task?.id) return;
 
@@ -72,6 +93,7 @@ export class TaskView {
       });
     }
   }
+  // Helpers
   returnToCategory() {
     const categoryId = this.route.parent?.snapshot.paramMap.get('categoryId');
     if (categoryId) {
@@ -80,7 +102,6 @@ export class TaskView {
       this.router.navigate(['/']); // Fallback to home if no category ID
     }
   }
-
   getStatusText(status: number): string {
     switch (status) {
       case 1:
@@ -105,7 +126,6 @@ export class TaskView {
         return '#94a3b8'; // gray – Unknown
     }
   }
-
   formatDate(dateString: Date): string {
     if (!dateString) return 'No due date';
     try {

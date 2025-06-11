@@ -47,6 +47,7 @@ export class CategoryView implements OnInit {
       }
     });
   }
+
   private mergeTaskLists(existing: Task[], updated: Task[]): Task[] {
     const result = [...existing];
 
@@ -82,7 +83,6 @@ export class CategoryView implements OnInit {
     });
   }
 
-
   updateTaskInCategory(updatedTask: Task): void {
     if (!this.category) return;
     const index = this.category.tasks.findIndex(t => t.id === updatedTask.id);
@@ -98,15 +98,20 @@ export class CategoryView implements OnInit {
 
     this.category.tasks.sort((a, b) => a.id - b.id);
   }
+
+  // Handlers for tasks
   handleTaskAdd(id: number): void {
     this.modalService.showAddTask(id);
   }
+
   handleTaskDeleted(deletedTaskId: number): void {
     if (!this.category) return;
 
     // Remove the deleted task from the category's task list
     this.category.tasks = this.category.tasks.filter(task => task.id !== deletedTaskId);
   }
+
+  // Handlers for categories
   handleCategoryDeleted(id: number): void {
     if (confirm('Are you sure you want to delete this category?')) {
       this.categoryService.deleteCategory(id).subscribe({
@@ -120,6 +125,7 @@ export class CategoryView implements OnInit {
       });
     }
   }
+
   handleCategoryEdit(id: number): void {
     this.categoryService.getCategoryById(id).subscribe({
       next: (category: Category) => {
