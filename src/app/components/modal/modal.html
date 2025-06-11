@@ -1,13 +1,15 @@
 @if (modalService.showCategoryModal) {
-<div class="modal-overlay">
-    <div class="modal-box">
+<div class="modal-overlay" (click)="modalService.closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+        <button class="btn-danger" (click)="modalService.closeModal()">X</button>
         <app-category-form />
     </div>
 </div>
 }
 @if (modalService.showTaskModal) {
-<div class="modal-overlay">
-    <div class="modal-box">
+<div class="modal-overlay" (click)="modalService.closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+        <button class="btn-danger" (click)="modalService.closeModal()">X</button>
         <app-task-form />
     </div>
 </div>
