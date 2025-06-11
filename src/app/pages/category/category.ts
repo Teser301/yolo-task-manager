@@ -83,21 +83,18 @@ export class CategoryView implements OnInit {
     });
   }
 
-  updateTaskInCategory(updatedTask: Task): void {
-    if (!this.category) return;
-    const index = this.category.tasks.findIndex(t => t.id === updatedTask.id);
-    if (index >= 0) {
-      // Update existing task
+  // handleTaskEdit(updatedTask: Task): void {
+  //   if (!this.category) return;
+  //   const index = this.category.tasks.findIndex(t => t.id === updatedTask.id);
+  //   if (index >= 0) {
 
-      this.category.tasks[index] = updatedTask;
-    } else {
-      // Add new task
-      console.log(this.category.tasks)
-      this.category.tasks.push(updatedTask);
-    }
+  //     this.category.tasks[index] = updatedTask;
+  //   } else {
+  //     this.category.tasks.push(updatedTask);
+  //   }
 
-    this.category.tasks.sort((a, b) => a.id - b.id);
-  }
+  //   this.category.tasks.sort((a, b) => a.id - b.id);
+  // }
 
   // Handlers for tasks
   handleTaskAdd(id: number): void {

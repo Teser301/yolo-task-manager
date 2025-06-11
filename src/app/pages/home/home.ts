@@ -4,6 +4,7 @@ import { Category } from "../../models/category.model";
 import { CategoryService } from "../../services/category/category";
 import { ModalService } from "../../services/modal/modal";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { TaskService } from "../../services/task/task";
 
 @Component({
   selector: 'app-home',
@@ -15,7 +16,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 export class Home {
   categories: Category[] = [];
   private destroyRef = inject(DestroyRef);
-
+  private taskService = inject(TaskService);
   constructor(
     private categoryService: CategoryService,
     public modalService: ModalService
@@ -23,8 +24,18 @@ export class Home {
 
   ngOnInit(): void {
     this.loadCategories();
+    this.loadTasks()
   }
-
+  private loadTasks(): void {
+    this.taskService.tasks$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(allTasks => {
+        this.categories = this.categories.map(category => ({
+          ...category,
+          tasks: allTasks.filter(task => task.category_id === category.id)
+        }));
+      });
+  }
   private loadCategories(): void {
     this.categoryService.allCategories$
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -77,4 +88,5 @@ export class Home {
       return category;
     });
   }
+
 }
