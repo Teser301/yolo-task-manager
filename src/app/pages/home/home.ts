@@ -26,7 +26,7 @@ export class Home {
   }
 
   private loadCategories(): void {
-    this.categoryService.categories$
+    this.categoryService.allCategories$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (categories) => {
@@ -40,8 +40,6 @@ export class Home {
       error: (err) => console.error('Failed to refresh categories', err)
     });
   }
-
-
   onCreateCategory() {
     this.modalService.showAddCategory();
   }

@@ -4,15 +4,14 @@
         <div class="category-header">
             <div>
                 <h1 class="category-title">{{category.title}}</h1>
-                <p class="category-description">This is the category for everything {{category.title}} related</p>
+                <p class="category-description">{{category.description}}</p>
                 <p class="category-subtext">Following tasks assigned to this are:</p>
             </div>
-            <div class="category-buttons">
-                <button class="btn-primary" (click)="onCreateTask()">Create Task</button>
-                <button class="btn-danger" (click)="onDelete()">Delete</button>
-                <button class="btn-info" (click)="onEdit()">Edit</button>
+            <div>
+                <button class="btn-primary" (click)="handleCategoryEdit(category.id)">Edit Category</button>
             </div>
         </div>
+
         <div class="tasks">
             <h3 class="title">Tasks ({{ category.tasks.length }})</h3>
             @for (task of category.tasks; track task.id) {
@@ -27,7 +26,7 @@
     </div>
     }
     <div class="footer-buttons">
-        @if (category) {<button class="btn btn-danger" (click)="onDelete()">Delete</button>}
+        @if (category) {<button class="btn btn-danger" (click)="handleCategoryDeleted(category.id)">Delete</button>}
         <button class="btn btn-secondary" routerLink="/">Return</button>
     </div>
 </section>
