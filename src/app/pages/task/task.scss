@@ -6,45 +6,85 @@
   max-width: 700px;
   margin: 2rem auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+  .task-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 
   .task-view-title {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+    font-size: 2.25rem;
+    font-weight: 600;
     color: #f1f5f9;
-    text-align: center;
   }
 
   .task-detail {
     background-color: #1e293b;
-    padding: 1.5rem;
+    padding: 1.75rem;
     border-radius: 10px;
     border: 1px solid #334155;
 
+    .task-info-group {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+
+      .task-info-item {
+        margin-bottom: 0.5rem;
+
+        .info-label {
+          display: block;
+          font-size: 0.875rem;
+          color: #94a3b8;
+          margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+          font-size: 1rem;
+          font-weight: 500;
+          &.category {
+            color: #c084fc; // violet
+          }
+        }
+      }
+    }
+
     .task-title {
-      font-size: 1.5rem;
+      font-size: 1.75rem;
+      font-weight: 600;
       margin-bottom: 1rem;
       color: #f8fafc;
     }
 
-    .task-meta {
-      margin-bottom: 0.5rem;
-      font-size: 1rem;
-
-      .status {
-        font-weight: bold;
-        color: #38bdf8; // sky-blue
+    .task-description {
+      .description-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+        color: #f1f5f9;
       }
 
-      .category-name {
-        font-weight: bold;
-        color: #c084fc; // violet
+      .description-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #cbd5e1;
       }
     }
 
     .task-actions {
-      margin-top: 1.5rem;
+      margin-top: 2rem;
       display: flex;
+      flex-wrap: wrap;
       gap: 1rem;
+
+      .btn {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
     }
   }
 
@@ -55,5 +95,22 @@
     padding: 2rem;
     background-color: #1e293b;
     border-radius: 10px;
+
+    i.icon-warning {
+      font-size: 2rem;
+      color: #f87171;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    h3 {
+      margin-bottom: 0.5rem;
+      color: #f1f5f9;
+    }
+
+    p {
+      margin-bottom: 1.5rem;
+      color: #cbd5e1;
+    }
   }
 }
