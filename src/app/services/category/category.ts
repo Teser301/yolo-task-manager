@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { Category } from '../../models/category.model';
-import { BehaviorSubject, Observable, tap, catchError, throwError, delay } from 'rxjs';
+import { BehaviorSubject, Observable, tap, catchError, throwError, delay, combineLatest, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { TaskService } from '../task/task';
 
 @Injectable({
   providedIn: 'root'
@@ -9,20 +10,29 @@ import { HttpClient } from '@angular/common/http';
 export class CategoryService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8000';
-
-  // Centralized state (starts empty, populated by API)
+  private taskService = inject(TaskService);  // Add this with other injections
+  // All categories
   private allCategoriesSubject = new BehaviorSubject<Category[]>([]);
-  allCategories$ = this.allCategoriesSubject.asObservable();
-
+  // Filter
+  private filterFnSubject = new BehaviorSubject<(c: Category) => boolean>(() => true);
+  // Specific category
   private categorySubject = new BehaviorSubject<number | null>(null);
+
+  categories$ = combineLatest([
+    this.allCategoriesSubject.asObservable(),
+    this.filterFnSubject.asObservable()
+  ]).pipe(
+    map(([categories, filterFn]) => categories.filter(filterFn))
+  );
+
+  filteredCategories$ = this.categories$;
+  allCategories$ = this.allCategoriesSubject.asObservable();
   category$ = this.categorySubject.asObservable();
 
   constructor() { }
 
-
-  // Get All Categories
-  getCategories(): Observable<Category[]> {
-    var url = `${this.apiUrl}/categories`
+  private fetchCategoriesFromServer(): Observable<Category[]> {
+    const url = `${this.apiUrl}/categories`;
     return this.http.get<Category[]>(url).pipe(
       tap({
         next: (categories) => {
@@ -32,6 +42,30 @@ export class CategoryService {
         error: (err) => console.error('Fetch error:', err)
       })
     );
+  }
+
+  loadCategories(): Observable<Category[]> {
+    return this.fetchCategoriesFromServer();
+  }
+  // Get All Categories
+  getCategories(): Observable<Category[]> {
+    const currentCategories = this.allCategoriesSubject.value;
+
+    if (currentCategories.length === 0) {
+      return this.fetchCategoriesFromServer().pipe(
+        map(() => {
+          const categories = this.allCategoriesSubject.value;
+          const filterFn = this.filterFnSubject.value;
+          return categories.filter(filterFn);
+        })
+      );
+    } else {
+      const filterFn = this.filterFnSubject.value;
+      return new Observable(observer => {
+        observer.next(currentCategories.filter(filterFn));
+        observer.complete();
+      });
+    }
   }
   // Get category by ID
   getCategoryById(id: number): Observable<Category> {
@@ -70,14 +104,19 @@ export class CategoryService {
   }
 
   deleteCategory(id: number): Observable<void> {
-    // Optimistic update
-    const url = `${this.apiUrl}/categories/${id}`
-    const current = this.allCategoriesSubject.value;
-    this.allCategoriesSubject.next(current.filter(c => c.id !== id));
+    const url = `${this.apiUrl}/categories/${id}`;
+    const currentCategories = this.allCategoriesSubject.value;
+
+    // Optimistic update - remove category first
+    this.allCategoriesSubject.next(currentCategories.filter(c => c.id !== id));
+
+    // Also remove all tasks for this category (optimistically)
+    this.taskService.deleteTasksForCategory(id);  // You'll need to implement this in TaskService
 
     return this.http.delete<void>(url).pipe(
       catchError(err => {
-        this.allCategoriesSubject.next(current);
+        // Revert both categories and tasks on error
+        this.allCategoriesSubject.next(currentCategories);
         console.error('Delete failed:', err);
         return throwError(() => err);
       })
@@ -107,5 +146,27 @@ export class CategoryService {
         return throwError(() => err);
       })
     );
+  }
+
+  // Filter
+
+  setCategoryFilter(fn: (c: Category) => boolean): void {
+    this.filterFnSubject.next(fn);
+  }
+
+  clearCategoryFilter(): void {
+    this.filterFnSubject.next(() => true);
+  }
+
+  // Helper method to get current filtered categories synchronously
+  getCurrentFilteredCategories(): Category[] {
+    const categories = this.allCategoriesSubject.value;
+    const filterFn = this.filterFnSubject.value;
+    return categories.filter(filterFn);
+  }
+
+  // Helper method to check if categories are loaded
+  get hasLoadedCategories(): boolean {
+    return this.allCategoriesSubject.value.length > 0;
   }
 }

@@ -5,6 +5,7 @@ import { Task } from '../../models/task.model';
 import { TaskService } from '../../services/task/task';
 import { CategoryService } from '../../services/category/category';
 import { Category } from '../../models/category.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-form',
@@ -15,9 +16,11 @@ import { Category } from '../../models/category.model';
 export class TaskForm implements OnInit {
   taskForm: FormGroup;
   categories: Category[] = [];
+  private categoriesSubscription?: Subscription;
 
   private taskService = inject(TaskService);
   private categoryService = inject(CategoryService);
+
   constructor(
     public modalService: ModalService,
     private fb: FormBuilder
@@ -29,12 +32,18 @@ export class TaskForm implements OnInit {
       due: [this.getToday(), [Validators.required]],
       category_id: ['', [Validators.required]]
     })
-
   }
+
   ngOnInit() {
-    this.fetchCategories();
+    this.subscribeToCategories();
     this.checkForEditMode();
     this.setPreselectedCategory();
+  }
+
+  ngOnDestroy() {
+    if (this.categoriesSubscription) {
+      this.categoriesSubscription.unsubscribe();
+    }
   }
 
   onSubmit() {
@@ -48,6 +57,7 @@ export class TaskForm implements OnInit {
       console.log('Form is invalid - Errors:', this.taskForm.errors);
     }
   }
+
   private createTask() {
     const formData: Task = this.taskForm.value;
 
@@ -56,6 +66,7 @@ export class TaskForm implements OnInit {
       error: (err) => this.handleError('creating', err)
     });
   }
+
   // Edit
   private editTask() {
     if (!this.modalService.editingTask) return;
@@ -70,10 +81,12 @@ export class TaskForm implements OnInit {
       error: (err) => this.handleError('updating', err)
     });
   }
+
   private handleSuccess() {
     this.modalService.closeModal();
     this.resetForm();
   }
+
   private resetForm() {
     this.taskForm.reset({
       status: 1,
@@ -81,11 +94,6 @@ export class TaskForm implements OnInit {
     });
   }
 
-  private markAllAsTouched() {
-    Object.values(this.taskForm.controls).forEach(control => {
-      control.markAsTouched();
-    });
-  }
   private handleError(action: string, err: any) {
     console.error(`Error ${action} task:`, err);
     alert(`Failed to ${action} task. Please try again.`);
@@ -98,6 +106,7 @@ export class TaskForm implements OnInit {
       });
     }
   }
+
   // If edit, fill inputs
   checkForEditMode() {
     const { modalType, editingTask } = this.modalService;
@@ -115,22 +124,32 @@ export class TaskForm implements OnInit {
       });
     }
   }
+
   // Get today for inputs
   getToday(): string {
     const today = new Date();
     return today.toISOString().split('T')[0];
   }
 
-  // Get
-  fetchCategories() {
-    this.categoryService.getCategories().subscribe({
+  // FIXED: Subscribe to the filtered categories observable instead of fetching
+  private subscribeToCategories() {
+    this.categoriesSubscription = this.categoryService.categories$.subscribe({
       next: (categories) => {
         this.categories = categories;
+        console.log('Categories updated in task form:', categories.length);
       },
       error: (err) => {
         console.error('Failed to load categories:', err);
       }
     });
-  }
 
+    // Only load categories if they haven't been loaded yet
+    if (!this.categoryService.hasLoadedCategories) {
+      this.categoryService.loadCategories().subscribe({
+        error: (err) => {
+          console.error('Failed to initially load categories:', err);
+        }
+      });
+    }
+  }
 }

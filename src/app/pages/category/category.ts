@@ -6,6 +6,7 @@ import { TaskCard } from '../../components/task-card/task-card';
 import { ModalService } from '../../services/modal/modal';
 import { TaskService } from '../../services/task/task';
 import { Task } from '../../models/task.model';
+import { merge } from 'rxjs';
 
 @Component({
   selector: 'app-category',
@@ -83,18 +84,6 @@ export class CategoryView implements OnInit {
     });
   }
 
-  // handleTaskEdit(updatedTask: Task): void {
-  //   if (!this.category) return;
-  //   const index = this.category.tasks.findIndex(t => t.id === updatedTask.id);
-  //   if (index >= 0) {
-
-  //     this.category.tasks[index] = updatedTask;
-  //   } else {
-  //     this.category.tasks.push(updatedTask);
-  //   }
-
-  //   this.category.tasks.sort((a, b) => a.id - b.id);
-  // }
 
   // Handlers for tasks
   handleTaskAdd(id: number): void {
@@ -107,6 +96,7 @@ export class CategoryView implements OnInit {
     // Remove the deleted task from the category's task list
     this.category.tasks = this.category.tasks.filter(task => task.id !== deletedTaskId);
   }
+
 
   // Handlers for categories
   handleCategoryDeleted(id: number): void {

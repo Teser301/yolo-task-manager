@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Category } from '../../models/category.model';
 import { TaskService } from '../../services/task/task';
 import { ModalService } from '../../services/modal/modal';
+import { CategoryService } from '../../services/category/category';
 
 @Component({
   selector: 'app-task-card',
@@ -17,6 +18,7 @@ export class TaskCard {
   category = input.required<Category>();
 
   constructor(
+    private categoryService: CategoryService,
     private taskService: TaskService,
     public modalService: ModalService
   ) { }

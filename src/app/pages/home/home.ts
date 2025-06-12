@@ -5,51 +5,77 @@ import { CategoryService } from "../../services/category/category";
 import { ModalService } from "../../services/modal/modal";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { TaskService } from "../../services/task/task";
+import { Search } from "../../components/search/search";
+import { combineLatest } from "rxjs";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CategoryCard],
+  imports: [CategoryCard, Search],
   templateUrl: './home.html',
   styleUrl: './home.scss'
 })
 export class Home {
   categories: Category[] = [];
+  filteredCategories: Category[] = [];
+  searchTerm: string = '';
+
   private destroyRef = inject(DestroyRef);
   private taskService = inject(TaskService);
-  constructor(
-    private categoryService: CategoryService,
-    public modalService: ModalService
-  ) { }
+  private categoryService = inject(CategoryService);
+  public modalService = inject(ModalService);
+
+  constructor() { }
 
   ngOnInit(): void {
-    this.loadCategories();
-    this.loadTasks()
+    this.initializeData();
+    this.subscribeToFilteredData();
   }
-  private loadTasks(): void {
-    this.taskService.tasks$
+
+  private initializeData(): void {
+    // Only load categories if they haven't been loaded yet
+    if (!this.categoryService.hasLoadedCategories) {
+      this.categoryService.loadCategories().subscribe({
+        error: (err) => console.error('Failed to fetch categories', err)
+      });
+    }
+  }
+
+  private subscribeToFilteredData(): void {
+    // Subscribe to ALL categories (for backup/reference)
+    combineLatest([
+      this.categoryService.allCategories$,
+      this.taskService.tasks$
+
+    ])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(allTasks => {
-        this.categories = this.categories.map(category => ({
+      .subscribe(([categories, tasks]) => {
+        this.categories = categories.map(category => ({
           ...category,
-          tasks: allTasks.filter(task => task.category_id === category.id)
+          tasks: tasks.filter(task => task.category_id === category.id)
         }));
       });
-  }
-  private loadCategories(): void {
-    this.categoryService.allCategories$
+
+    // Subscribe to FILTERED categories (main display)
+    combineLatest([
+      this.categoryService.categories$, // Changed from filteredCategories$ to categories$
+      this.taskService.tasks$
+    ])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe({
-        next: (categories) => {
-          this.categories = categories;
-        },
-        error: (err) => {
-          console.error('Failed to load categories', err);
-        }
+      .subscribe(([filteredCategories, tasks]) => {
+        // Map filtered categories with their tasks
+        const categoriesWithTasks = filteredCategories.map(category => ({
+          ...category,
+          tasks: tasks.filter(task => task.category_id === category.id)
+        }));
+
+        // Apply search and sort on the filtered set
+        this.filteredCategories = this.filterAndSortCategories(
+          categoriesWithTasks,
+          this.searchTerm,
+          'title'
+        );
       });
-    this.categoryService.getCategories().subscribe({
-      error: (err) => console.error('Failed to refresh categories', err)
-    });
   }
 
   onCreateCategory() {
@@ -61,6 +87,7 @@ export class Home {
       console.warn('No categories exist - this button should be hidden');
       return;
     }
+
     this.modalService.showAddTask();
   }
 
@@ -77,16 +104,86 @@ export class Home {
     this.modalService.showEditCategory(category);
   }
 
+  // SIMPLIFIED: Task deletion is now handled by the service optimistically
+  // The subscription will automatically update the UI
   handleTaskDeleted(event: { taskId: number, categoryId: number }) {
-    this.categories = this.categories.map(category => {
-      if (category.id === event.categoryId) {
-        return {
-          ...category,
-          tasks: category.tasks?.filter(task => task.id !== event.taskId) || []
-        };
+    this.taskService.deleteTask(event.taskId).subscribe({
+      error: (err) => {
+        console.error('Failed to delete task', err);
+        alert('Could not delete task. Please try again.');
       }
-      return category;
     });
   }
 
+  onSearch(event: SearchEvent) {
+    this.searchTerm = event.term;
+
+    // Re-apply search/sort to current filtered categories
+    combineLatest([
+      this.categoryService.categories$,
+      this.taskService.tasks$
+    ])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(([filteredCategories, tasks]) => {
+        const categoriesWithTasks = filteredCategories.map(category => ({
+          ...category,
+          tasks: tasks.filter(task => task.category_id === category.id)
+        }));
+
+        this.filteredCategories = this.filterAndSortCategories(
+          categoriesWithTasks,
+          event.term,
+          event.sortBy
+        );
+      });
+  }
+
+  private filterAndSortCategories(
+    categories: Category[],
+    term: string,
+    sortBy: 'title' | 'nameReverse' | 'taskCount' | 'taskCountReverse'
+  ): Category[] {
+    // Filter first
+    const filtered = term
+      ? categories
+        .map(category => {
+          const categoryMatches = category.title.toLowerCase().includes(term);
+          let filteredTasks;
+
+          if (categoryMatches) {
+            filteredTasks = category.tasks ?? [];
+          } else {
+            filteredTasks = (category.tasks ?? []).filter(task =>
+              task.title.toLowerCase().includes(term) ||
+              (task.description && task.description.toLowerCase().includes(term))
+            ); // This parenthesis was missing
+          }
+
+          return {
+            ...category,
+            tasks: filteredTasks
+          };
+        })
+        .filter(category =>
+          category.title.toLowerCase().includes(term) ||
+          (category.tasks && category.tasks.length > 0)
+        )
+      : categories;
+
+    // Then sort (applies to all cases)
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'title':
+          return a.title.localeCompare(b.title);
+        case 'nameReverse':
+          return b.title.localeCompare(a.title);
+        case 'taskCount':
+          return (b.tasks?.length || 0) - (a.tasks?.length || 0);
+        case 'taskCountReverse':
+          return (a.tasks?.length || 0) - (b.tasks?.length || 0);
+        default:
+          return a.title.localeCompare(b.title); // Default case
+      }
+    });
+  }
 }

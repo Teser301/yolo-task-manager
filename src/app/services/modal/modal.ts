@@ -27,26 +27,26 @@ export class ModalService {
     if (category) {
       this.modalCategorySubject.next(category);
     }
-    console.log('Edit modal opened');
+    console.log('Edit Category modal opened');
   }
 
   showAddCategory() {
     this.modalType = 'add';
     this.showCategoryModal = true;
-    console.log('Add modal opened');
+    console.log('Add Category modal opened');
   }
   // Handle Tasks
   showEditTask(task: Task) {
     this.editingTask = task;
     this.modalType = 'edit';
     this.showTaskModal = true;
-    console.log('Edit modal opened');
+    console.log('Edit Task modal opened');
   }
   showAddTask(categoryId?: number) {
     this.modalType = 'add';
     this.showTaskModal = true;
     this.preselectedCategoryId = categoryId || null;
-    console.log('Add modal opened');
+    console.log('Add Task modal opened');
   }
   // Shared
   closeModal() {

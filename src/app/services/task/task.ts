@@ -2,19 +2,18 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, catchError, of, tap, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Task } from '../../models/task.model';
-import { CategoryService } from '../category/category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000'; // Adjust if tasks are on a separate route
+  private apiUrl = 'http://localhost:8000';
 
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   public tasks$ = this.tasksSubject.asObservable();
 
-  constructor(private categoryService: CategoryService) {
+  constructor() {
     this.loadAllTasks();
   }
 
@@ -43,7 +42,10 @@ export class TaskService {
 
   createNewTask(task: Task): Observable<Task> {
     return this.http.post<Task>(`${this.apiUrl}/tasks`, task).pipe(
-      tap(() => this.loadAllTasks()), // Refresh the complete list
+      tap((newTask) => {
+        // Add the newly created task only after server confirmation
+        this.tasksSubject.next([...this.tasksSubject.value, newTask]);
+      }),
       catchError(err => {
         console.error('Task creation failed:', err);
         return throwError(() => err);
@@ -52,16 +54,15 @@ export class TaskService {
   }
 
   deleteTask(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/tasks/${id}`).pipe(
-      tap(() => {
-        // Update the BehaviorSubject
-        const currentTasks = this.tasksSubject.value;
-        this.tasksSubject.next(currentTasks.filter(task => task.id !== id));
+    const currentTasks = this.tasksSubject.value;
 
-        // Refresh categories if needed
-        this.categoryService.getCategories().subscribe();
-      }),
+    // Optimistic update
+    this.tasksSubject.next(currentTasks.filter(task => task.id !== id));
+
+    return this.http.delete<void>(`${this.apiUrl}/tasks/${id}`).pipe(
       catchError(err => {
+        // Revert optimistic update
+        this.tasksSubject.next(currentTasks);
         console.error('Error deleting task:', err);
         return throwError(() => err);
       })
@@ -69,28 +70,33 @@ export class TaskService {
   }
 
   editTask(id: number, updatedTask: Task): Observable<Task> {
-    // Format the due date if it exists
     const taskToSend = {
       ...updatedTask,
       due: updatedTask.due ? new Date(updatedTask.due).toISOString() : null
     };
-
-    console.log(id);
-    console.log(taskToSend);
-
-    const current = this.tasksSubject.value;
+    const currentTasks = this.tasksSubject.value;
+    // Optimistic update
     this.tasksSubject.next(
-      current.map(t => t.id === id ? { ...t, ...updatedTask } : t)
+      currentTasks.map(t => t.id === id ? { ...t, ...updatedTask } : t)
     );
 
     return this.http.put<Task>(`${this.apiUrl}/tasks/${id}`, taskToSend).pipe(
-      tap(() => {
-        this.categoryService.getCategories().subscribe();
+      tap((returnedTask) => {
+        // Update with server response
+        const updated = currentTasks.map(t => t.id === id ? returnedTask : t);
+        this.tasksSubject.next(updated);
       }),
       catchError(err => {
-        this.tasksSubject.next(current);
+        // Revert optimistic update
+        this.tasksSubject.next(currentTasks);
+        console.error('Error editing task:', err);
         return throwError(() => err);
       })
     );
+  }
+
+  deleteTasksForCategory(categoryId: number): void {
+    const currentTasks = this.tasksSubject.value;
+    this.tasksSubject.next(currentTasks.filter(t => t.category_id !== categoryId));
   }
 }
