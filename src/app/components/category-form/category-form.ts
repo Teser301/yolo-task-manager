@@ -13,6 +13,7 @@ import { CategoryService } from '../../services/category/category';
 export class CategoryForm {
   categoryForm: FormGroup;
   isSubmitting: boolean = false;
+  errorMessage: string | null = null;
   private categoryService = inject(CategoryService);
 
   constructor(
@@ -39,6 +40,7 @@ export class CategoryForm {
   }
   onSubmit() {
     if (this.categoryForm.valid) {
+      this.errorMessage = null;
       if (this.modalService.modalType === 'add') {
         this.createCategory();
       } else {
@@ -46,6 +48,7 @@ export class CategoryForm {
       }
     } else {
       console.log('Form is invalid - Errors:', this.categoryForm.errors);
+      this.errorMessage = 'Make sure you filled in the form';
     }
   }
   // Create Category
@@ -64,10 +67,20 @@ export class CategoryForm {
       },
       error: (err) => {
         this.isSubmitting = false;
-        console.error('Error creating category:', err);
+        console.log(err)
+
+        if (err.status === 400) {
+          // Handle duplicate category error
+          this.errorMessage = 'A category with this name already exists';
+        } else {
+          this.errorMessage = 'Failed to create category. Please try again.';
+          console.error('Error creating category:', err);
+        }
       }
     });
-
+  }
+  showError(arg0: string) {
+    throw new Error('Method not implemented.');
   }
   // Edit Category
   editCategory() {
@@ -84,7 +97,11 @@ export class CategoryForm {
         this.modalService.closeModal();
         this.categoryForm.reset();
       },
-      error: (err) => console.error('Error editing category:', err)
+      error: (err) => {
+        this.errorMessage = 'Failed to create category. Please try again.';
+        console.error('Error editing category:', err)
+      }
+
     });
   }
 }

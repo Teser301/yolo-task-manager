@@ -78,16 +78,26 @@ export class CategoryService {
     const url = `${this.apiUrl}/categories`;
     const current = this.allCategoriesSubject.value;
 
+    // First check for duplicate name
+    const duplicate = current.find(c =>
+      c.title.toLowerCase() === category.title.toLowerCase()
+    );
+
+    if (duplicate) {
+      return throwError(() => ({
+        status: 400,
+        error: { message: `A category with the title "${category.title}" already exists` }
+      }));
+    }
+
     // Trying Optimistic Behavior
-    // So Im generating a temporary fake ID so the ui can track it
     const tempId = Math.floor(Math.random() * -10000);
     const optimisticCategory: Category = { ...category, id: tempId };
+
     // Then add it to the UI, expecting it to be there already
     this.allCategoriesSubject.next([...current, optimisticCategory]);
 
     return this.http.post<Category>(url, category).pipe(
-      // For testing optimistic behaviour
-      // delay(2000),
       tap((newCategory) => {
         // Replace the temp category with the real one when it's done
         const updated = this.allCategoriesSubject.value.map(c =>
