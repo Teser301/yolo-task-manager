@@ -8,12 +8,13 @@
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
-    h3 {
+    .category-title {
       font-size: 1.25rem;
       font-weight: 600;
       margin: 0 0 0.5rem 0;
     }
-    p {
+    .category-description {
+      white-space: pre-wrap;
       font-size: 0.95rem;
       margin-bottom: 1rem;
     }

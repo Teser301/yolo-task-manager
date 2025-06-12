@@ -17,6 +17,7 @@
     flex-direction: column;
     justify-content: space-between;
   }
+
   .category-header {
     .category-title {
       font-size: 2rem;
@@ -29,6 +30,7 @@
       font-size: 1rem;
       margin-bottom: 1rem;
       color: variables.$color-w;
+      white-space: pre-wrap;
     }
   }
 

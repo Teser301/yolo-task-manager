@@ -4,12 +4,13 @@
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
   color: #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  word-break: break-all;
+  display: grid;
+  grid-template-columns: 1fr auto;
   &:hover {
     background-color: #273549;
   }
@@ -19,7 +20,15 @@
     color: #f1f5f9;
     margin: 0;
   }
+  .task-description {
+    white-space: pre-wrap;
+    word-break: break-all;
+    .description-header {
+      display: block;
+    }
+  }
   .task-buttons {
+    width: 100%;
     display: flex;
     gap: 10px;
   }
