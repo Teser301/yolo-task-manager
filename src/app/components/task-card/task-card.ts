@@ -44,4 +44,7 @@ export class TaskCard {
   get statusColor(): string {
     return this.taskService.getStatusColor(this.task().status);
   }
+  get formatDate(): string {
+    return this.taskService.formatDate(this.task().due);
+  }
 }

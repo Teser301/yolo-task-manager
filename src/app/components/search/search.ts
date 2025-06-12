@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 export class Search {
   private fb = inject(FormBuilder);
-
+  searchMode = input<'category' | 'task'>('category');
   searchChanged = output<SearchEvent>();
 
   searchForm = this.fb.group({
@@ -23,9 +23,6 @@ export class Search {
   constructor() {
     const initialSearchTerm = this.searchForm.value.searchTerm ?? '';
     const initialSortBy = this.searchForm.value.sortBy ?? 'title';
-
-    console.log('Initial emit:', { term: initialSearchTerm, sortBy: initialSortBy });
-
     this.searchChanged.emit({
       term: initialSearchTerm.toLowerCase(),
       sortBy: initialSortBy

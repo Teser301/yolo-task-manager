@@ -2,9 +2,19 @@
     <input type="text" formControlName="searchTerm" placeholder="Search categories and tasks..." />
 
     <select formControlName="sortBy">
-        <option selected value="title">Sort by Name (A-Z)</option>
+        <option value="title">Sort by Name (A-Z)</option>
         <option value="nameReverse">Sort by Name (Z-A)</option>
+        @if (searchMode() === "category") {
+
         <option value="taskCount">Sort by Task Count (High-Low)</option>
         <option value="taskCountReverse">Sort by Task Count (Low-High)</option>
+        }
+        @if (searchMode() === "task") {
+        <option value="taskStatusAsc">Sort by 'To Do'</option>
+        <option value="taskStatusDesc">Sort by 'Done'</option>
+        <option value="taskDateAsc">Sort by Earliest Due Date</option>
+        <option value="taskDateDesc">Sort by Latest Due Date</option>
+        }
+
     </select>
 </div>

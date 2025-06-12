@@ -19,7 +19,7 @@ export class Home {
   categories: Category[] = [];
   filteredCategories: Category[] = [];
   searchTerm: string = '';
-
+  searchMode = 'category'
   private destroyRef = inject(DestroyRef);
   private taskService = inject(TaskService);
   private categoryService = inject(CategoryService);
@@ -88,7 +88,6 @@ export class Home {
 
   onSearch(event: SearchEvent) {
     this.searchTerm = event.term;
-
     // Re-apply search/sort to current filtered categories
     combineLatest([
       this.categoryService.categories$,

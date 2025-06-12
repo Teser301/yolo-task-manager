@@ -9,7 +9,7 @@
         </div>
     </div>
     <div>
-        <app-search (searchChanged)="onSearch($event)" />
+        <app-search (searchChanged)="onSearch($event)" searchMode="category" />
     </div>
     <div class="category-list">
         @for (category of filteredCategories; track category.id) {

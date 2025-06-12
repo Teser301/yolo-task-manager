@@ -29,8 +29,6 @@ export class CategoryView implements OnInit {
   destroyRef: DestroyRef | undefined;
 
   ngOnInit() {
-    console.log(this.filteredTasks)
-    // Get category ID from url
     const id = Number(this.route.parent?.snapshot.paramMap.get('categoryId'));
     this.loadCategory(id);
 
@@ -44,12 +42,19 @@ export class CategoryView implements OnInit {
     // Listen for task updates
     this.taskService.tasks$.subscribe(allTasks => {
       if (!this.category) return;
-      const categoryTasks = allTasks.filter(t => t.category_id === this.category?.id);
 
+      const categoryTasks = allTasks.filter(t => t.category_id === this.category?.id);
       const mergedTasks = this.mergeTaskLists(this.category.tasks, categoryTasks);
 
       if (!this.areTaskListsEqual(this.category.tasks, mergedTasks)) {
-        this.category.tasks = mergedTasks;
+        // Create a new array reference to trigger change detection
+        this.category.tasks = [...mergedTasks];
+
+        // Update filteredTasks with proper sorting
+        this.filteredTasks = this.sortTasks(
+          [...mergedTasks],
+          this.searchTerm,
+        );
       }
     });
   }
@@ -98,8 +103,12 @@ export class CategoryView implements OnInit {
   handleTaskDeleted(deletedTaskId: number): void {
     if (!this.category) return;
 
-    // Remove the deleted task from the category's task list
+    // Optimistically update both task lists
     this.category.tasks = this.category.tasks.filter(task => task.id !== deletedTaskId);
+    this.filteredTasks = this.filteredTasks.filter(task => task.id !== deletedTaskId);
+
+    // Optional: Force UI update if needed
+    this.filteredTasks = [...this.filteredTasks]; // Create new array reference
   }
   // Handlers for categories
   handleCategoryDeleted(id: number): void {
@@ -128,30 +137,49 @@ export class CategoryView implements OnInit {
     });
   }
   onSearch(event: SearchEvent) {
-    this.searchTerm = event.term.toLowerCase();
+    this.searchTerm = event.term;
 
     if (!this.category) return;
 
-    const tasks = this.category.tasks || [];
-
-    // Filter tasks by title or description
-    const filtered = tasks.filter(task =>
-      task.title.toLowerCase().includes(this.searchTerm) ||
-      (task.description && task.description.toLowerCase().includes(this.searchTerm))
+    // Filter tasks in the current category
+    const filtered = (this.category.tasks ?? []).filter(task =>
+      task.title.toLowerCase().includes(event.term) ||
+      (task.description && task.description.toLowerCase().includes(event.term))
     );
 
-    // Optional sorting
-    switch (event.sortBy) {
-      case 'title':
-        filtered.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'nameReverse':
-        filtered.sort((a, b) => b.title.localeCompare(a.title));
-        break;
-      // You could implement sorting by date or priority here as well
-    }
+    // Sort the filtered tasks according to event.sortBy
+    this.filteredTasks = this.sortTasks(filtered, event.sortBy);
+  }
+  private sortTasks(tasks: Task[], sortBy: string): Task[] {
+    switch (sortBy) {
+      case 'taskStatusAsc':  // Low → High (1, 2, 3...)
+        return [...tasks].sort((a, b) => a.status - b.status);
 
-    this.filteredTasks = filtered;
+      case 'taskStatusDesc': // High → Low (3, 2, 1...)
+        return [...tasks].sort((a, b) => b.status - a.status);
+      case 'taskDateAsc':
+        return [...tasks].sort((a, b) => {
+          if (!a.due) return 1;
+          if (!b.due) return -1;
+          return new Date(a.due).getTime() - new Date(b.due).getTime();
+        });
+
+      case 'taskDateDesc':
+        return [...tasks].sort((a, b) => {
+          if (!a.due) return 1;
+          if (!b.due) return -1;
+          return new Date(b.due).getTime() - new Date(a.due).getTime();
+        });
+
+      case 'title':
+        return [...tasks].sort((a, b) => a.title.localeCompare(b.title));
+
+      case 'nameReverse':
+        return [...tasks].sort((a, b) => b.title.localeCompare(a.title));
+
+      default:
+        return tasks;
+    }
   }
 
 }

@@ -5,6 +5,7 @@
     <p class="task-description">
       <strong class="description-header">Description:</strong>{{task().description}}
     </p>
+    <p>{{ formatDate }}</p>
   </div>
   <div class="task-buttons">
     <button class="btn-primary" [routerLink]=" ['/category', category().id, 'task' , task().id]">View Task</button>

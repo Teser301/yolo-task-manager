@@ -10,7 +10,7 @@
             </div>
         </div>
         <div>
-            <app-search (searchChanged)="onSearch($event)" />
+            <app-search (searchChanged)="onSearch($event)" searchMode="task" />
         </div>
         <div class="category-tasks">
             <h3 class="title">Tasks ({{ filteredTasks.length }})</h3>
