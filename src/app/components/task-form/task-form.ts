@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ModalService } from '../../services/modal/modal';
 import { Task } from '../../models/task.model';
@@ -18,12 +18,11 @@ export class TaskForm implements OnInit {
   categories: Category[] = [];
   private categoriesSubscription?: Subscription;
 
-  private taskService = inject(TaskService);
-  private categoryService = inject(CategoryService);
-
   constructor(
     public modalService: ModalService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private taskService: TaskService,
+    private categoryService: CategoryService
   ) {
     this.taskForm = this.fb.group({
       title: ['', Validators.required],
@@ -45,70 +44,26 @@ export class TaskForm implements OnInit {
       this.categoriesSubscription.unsubscribe();
     }
   }
-
-  onSubmit() {
-    if (this.taskForm.valid) {
-      if (this.modalService.modalType === 'add') {
-        this.createTask();
-      } else {
-        this.editTask();
+  private subscribeToCategories() {
+    this.categoriesSubscription = this.categoryService.categories$.subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        console.log('Categories updated in task form:', categories.length);
+      },
+      error: (err) => {
+        console.error('Failed to load categories:', err);
       }
-    } else {
-      console.log('Form is invalid - Errors:', this.taskForm.errors);
-    }
-  }
-
-  private createTask() {
-    const formData: Task = this.taskForm.value;
-
-    this.taskService.createNewTask(formData).subscribe({
-      next: () => this.handleSuccess(),
-      error: (err) => this.handleError('creating', err)
     });
-  }
 
-  // Edit
-  private editTask() {
-    if (!this.modalService.editingTask) return;
-
-    const formData: Task = {
-      ...this.modalService.editingTask,
-      ...this.taskForm.value
-    };
-
-    this.taskService.editTask(this.modalService.editingTask.id, formData).subscribe({
-      next: () => this.handleSuccess(),
-      error: (err) => this.handleError('updating', err)
-    });
-  }
-
-  private handleSuccess() {
-    this.modalService.closeModal();
-    this.resetForm();
-  }
-
-  private resetForm() {
-    this.taskForm.reset({
-      status: 1,
-      due: this.getToday()
-    });
-  }
-
-  private handleError(action: string, err: any) {
-    console.error(`Error ${action} task:`, err);
-    alert(`Failed to ${action} task. Please try again.`);
-  }
-
-  setPreselectedCategory() {
-    if (this.modalService.modalType === 'add' && this.modalService.preselectedCategoryId) {
-      this.taskForm.patchValue({
-        category_id: this.modalService.preselectedCategoryId
+    if (!this.categoryService.hasLoadedCategories) {
+      this.categoryService.loadCategories().subscribe({
+        error: (err) => {
+          console.error('Failed to initially load categories:', err);
+        }
       });
     }
   }
-
-  // If edit, fill inputs
-  checkForEditMode() {
+  private checkForEditMode() {
     const { modalType, editingTask } = this.modalService;
     if (modalType === 'edit' && editingTask) {
       const formattedDate = editingTask.due
@@ -124,32 +79,71 @@ export class TaskForm implements OnInit {
       });
     }
   }
+  private setPreselectedCategory() {
+    if (this.modalService.modalType === 'add' && this.modalService.preselectedCategoryId) {
+      this.taskForm.patchValue({
+        category_id: this.modalService.preselectedCategoryId
+      });
+    }
+  }
+
+
+  onSubmit() {
+    if (this.taskForm.valid) {
+      if (this.modalService.modalType === 'add') {
+        this.createTask();
+      } else {
+        this.editTask();
+      }
+    } else {
+      console.log('Form is invalid - Errors:', this.taskForm.errors);
+    }
+  }
+
+
+  // Create
+  private createTask() {
+    const formData: Task = this.taskForm.value;
+
+    this.taskService.createNewTask(formData).subscribe({
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError('creating', err)
+    });
+  }
+  // Edit
+  private editTask() {
+    if (!this.modalService.editingTask) return;
+
+    const formData: Task = {
+      ...this.modalService.editingTask,
+      ...this.taskForm.value
+    };
+
+    this.taskService.editTask(this.modalService.editingTask.id, formData).subscribe({
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError('updating', err)
+    });
+  }
+
+  //Helpers
 
   // Get today for inputs
-  getToday(): string {
+  private getToday(): string {
     const today = new Date();
     return today.toISOString().split('T')[0];
   }
-
-  // FIXED: Subscribe to the filtered categories observable instead of fetching
-  private subscribeToCategories() {
-    this.categoriesSubscription = this.categoryService.categories$.subscribe({
-      next: (categories) => {
-        this.categories = categories;
-        console.log('Categories updated in task form:', categories.length);
-      },
-      error: (err) => {
-        console.error('Failed to load categories:', err);
-      }
+  private handleSuccess() {
+    this.modalService.closeModal();
+    this.resetForm();
+  }
+  private handleError(action: string, err: any) {
+    console.error(`Error ${action} task:`, err);
+    alert(`Failed to ${action} task. Please try again.`);
+  }
+  private resetForm() {
+    this.taskForm.reset({
+      status: 1,
+      due: this.getToday()
     });
-
-    // Only load categories if they haven't been loaded yet
-    if (!this.categoryService.hasLoadedCategories) {
-      this.categoryService.loadCategories().subscribe({
-        error: (err) => {
-          console.error('Failed to initially load categories:', err);
-        }
-      });
-    }
   }
 }

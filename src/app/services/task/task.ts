@@ -99,4 +99,37 @@ export class TaskService {
     const currentTasks = this.tasksSubject.value;
     this.tasksSubject.next(currentTasks.filter(t => t.category_id !== categoryId));
   }
+
+
+  getStatusText(status: number): string {
+    switch (status) {
+      case 1: return 'To Do';
+      case 2: return 'In Progress';
+      case 3: return 'Done';
+      default: return 'Unknown';
+    }
+  }
+
+  getStatusColor(status: number): string {
+    switch (status) {
+      case 1: return '#facc15';
+      case 2: return '#38bdf8';
+      case 3: return '#4ade80';
+      default: return '#94a3b8';
+    }
+  }
+
+  formatDate(dateString: Date | string): string {
+    if (!dateString) return 'No due date';
+    try {
+      const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+      };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    } catch {
+      return 'Invalid date';
+    }
+  }
 }

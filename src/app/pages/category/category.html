@@ -1,4 +1,5 @@
 <section class="category-view">
+
     @if (category) {
     <div class="category-content">
         <div class="category-header">
@@ -8,10 +9,17 @@
                 <p class="category-subtext">Following tasks assigned to this are:</p>
             </div>
         </div>
+        <div>
+            <app-search (searchChanged)="onSearch($event)" />
+        </div>
         <div class="category-tasks">
-            <h3 class="title">Tasks ({{ category.tasks.length }})</h3>
-            @for (task of category.tasks; track task.id) {
+            <h3 class="title">Tasks ({{ filteredTasks.length }})</h3>
+            @if (filteredTasks.length > 0) {
+            @for (task of filteredTasks; track task.id) {
             <app-task-card [task]="task" [category]="category" (taskDeleted)="handleTaskDeleted($event)" />
+            }
+            } @else {
+            <p class="no-tasks">No tasks match your search.</p>
             }
         </div>
 

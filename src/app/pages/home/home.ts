@@ -33,7 +33,6 @@ export class Home {
   }
 
   private initializeData(): void {
-    // Only load categories if they haven't been loaded yet
     if (!this.categoryService.hasLoadedCategories) {
       this.categoryService.loadCategories().subscribe({
         error: (err) => console.error('Failed to fetch categories', err)
@@ -42,7 +41,6 @@ export class Home {
   }
 
   private subscribeToFilteredData(): void {
-    // Subscribe to ALL categories (for backup/reference)
     combineLatest([
       this.categoryService.allCategories$,
       this.taskService.tasks$
@@ -56,20 +54,17 @@ export class Home {
         }));
       });
 
-    // Subscribe to FILTERED categories (main display)
     combineLatest([
-      this.categoryService.categories$, // Changed from filteredCategories$ to categories$
+      this.categoryService.categories$,
       this.taskService.tasks$
     ])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(([filteredCategories, tasks]) => {
-        // Map filtered categories with their tasks
         const categoriesWithTasks = filteredCategories.map(category => ({
           ...category,
           tasks: tasks.filter(task => task.category_id === category.id)
         }));
 
-        // Apply search and sort on the filtered set
         this.filteredCategories = this.filterAndSortCategories(
           categoriesWithTasks,
           this.searchTerm,
@@ -77,7 +72,7 @@ export class Home {
         );
       });
   }
-
+  // On use
   onCreateCategory() {
     this.modalService.showAddCategory();
   }
@@ -89,30 +84,6 @@ export class Home {
     }
 
     this.modalService.showAddTask();
-  }
-
-  handleCategoryDeleted(id: number): void {
-    this.categoryService.deleteCategory(id).subscribe({
-      error: (err) => {
-        console.error('Failed to delete category', err);
-        alert('Could not delete category. Please try again.');
-      }
-    });
-  }
-
-  handleCategoryEdit(category: Category) {
-    this.modalService.showEditCategory(category);
-  }
-
-  // SIMPLIFIED: Task deletion is now handled by the service optimistically
-  // The subscription will automatically update the UI
-  handleTaskDeleted(event: { taskId: number, categoryId: number }) {
-    this.taskService.deleteTask(event.taskId).subscribe({
-      error: (err) => {
-        console.error('Failed to delete task', err);
-        alert('Could not delete task. Please try again.');
-      }
-    });
   }
 
   onSearch(event: SearchEvent) {
@@ -138,6 +109,31 @@ export class Home {
       });
   }
 
+  // Handlers
+  handleCategoryDeleted(id: number): void {
+    this.categoryService.deleteCategory(id).subscribe({
+      error: (err) => {
+        console.error('Failed to delete category', err);
+        alert('Could not delete category. Please try again.');
+      }
+    });
+  }
+
+  handleCategoryEdit(category: Category) {
+    this.modalService.showEditCategory(category);
+  }
+
+  handleTaskDeleted(event: { taskId: number, categoryId: number }) {
+    this.taskService.deleteTask(event.taskId).subscribe({
+      error: (err) => {
+        console.error('Failed to delete task', err);
+        alert('Could not delete task. Please try again.');
+      }
+    });
+  }
+
+
+  // Home Search
   private filterAndSortCategories(
     categories: Category[],
     term: string,

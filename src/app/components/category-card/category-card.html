@@ -1,8 +1,11 @@
 <section class="category-card">
     <div class="category-content">
         <div>
-            <h3>{{ category().title }}</h3>
-            <p>{{ category().description }}</p>
+            <h3 class="category-title">{{ category().title }}</h3>
+            <p class="category-description">
+                <strong>Description:</strong> {{ category().description }}
+            </p>
+
         </div>
         <div class="category-buttons">
             <button class="btn-primary" routerLink="/category/{{category().id}}">View Category</button>
