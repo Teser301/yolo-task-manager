@@ -9,7 +9,7 @@ Prerequisites:
 
 Python 3.8+
 
-Node.js 16+ 
+Node.js 22+ 
 
 ```bash
 npm run start-project
