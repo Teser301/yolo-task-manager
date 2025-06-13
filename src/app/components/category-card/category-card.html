@@ -1,18 +1,40 @@
 <section class="category-card">
-    <div class="category-content">
-        <div>
-            <h3 class="category-title">{{ category().title }}</h3>
-            <p class="category-description">
-                <strong>Description:</strong> {{ category().description }}
-            </p>
+    <div class="category-header">
+        <h3 class="category-title">{{ category().title }}</h3>
+        <div class="category-operate">
 
-        </div>
-        <div class="category-buttons">
-            <button class="btn-primary" routerLink="/category/{{category().id}}">View Category</button>
-            <button class="btn-danger" (click)="onDelete()">Delete</button>
-            <button class="btn-info" (click)="onEdit()">Edit</button>
+            <div class="category-status">
+                <!-- <app-icon type="category" /> -->
+                {{ category().tasks?.length || 0 }} tasks
+            </div>
+            <div class="category-actions">
+                <button class="btn btn-primary" routerLink="/category/{{category().id}}">
+                    <app-icon type="view" />
+                    View
+                </button>
+                <button class="btn btn-info" (click)="onEdit()">
+                    <app-icon type="edit" />
+                    Edit
+                </button>
+                <button class="btn btn-danger" (click)="onDelete()">
+                    <app-icon type="delete" />
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
+
+    <div class="category-content">
+        <div class="category-details">
+            <p class="category-description">
+                <span class="description-label">Description:</span>
+                {{ category().description || 'No description provided' }}
+            </p>
+        </div>
+
+
+    </div>
+
     @if (category().tasks && category().tasks.length > 0) {
     <div class="task-list">
         @for (task of category().tasks; track task.id) {
@@ -21,7 +43,7 @@
     </div>
     } @else {
     <div class="empty-tasks">
-        No tasks in this category yet
+        <span>No tasks in this category yet</span>
     </div>
     }
 </section>

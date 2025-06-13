@@ -1,26 +1,76 @@
+@use "../../../sass/variables";
+
 .category-card {
-  background-color: #374151; // Match dark theme
-  border-radius: 10px;
-  padding: 1.5rem;
-  color: #e5e7eb; // Light text
-  .category-content {
+  background-color: variables.$color-g-d;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+
+  .category-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    .category-title {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin: 0 0 0.5rem 0;
-    }
-    .category-description {
-      white-space: pre-wrap;
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .category-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .category-operate {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .category-status {
+    font-size: 0.85rem;
+    text-align: right;
+  }
+
+  .category-content {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem;
+  }
+
+  .category-description {
+    margin: 0.5rem 0;
+    line-height: 1.5;
+    white-space: pre-wrap;
+
+    .description-label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
     }
   }
-  .category-buttons {
+
+  .category-actions {
     display: flex;
-    gap: 10px;
+    gap: 0.75rem;
+    align-self: center;
+  }
+
+  .task-list {
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .empty-tasks {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(variables.$color-w, 0.1);
+    justify-content: center;
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
   }
 }

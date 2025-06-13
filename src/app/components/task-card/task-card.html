@@ -1,15 +1,38 @@
-<div class="task-card">
-  <div class="task-content">
-    <h3>{{ task().title }}</h3>
-    <p>Status:<span [style.color]="statusColor"> {{ statusText }}</span></p>
-    <p class="task-description">
-      <strong class="description-header">Description:</strong>{{task().description}}
-    </p>
-    <p>{{ formatDate }}</p>
+<div class="task-card" [style.border-left-color]="statusColor">
+  <div class="task-header">
+    <h3 class="task-title">{{ task().title }}</h3>
+    <div class="task-status" [style.color]="statusColor">
+      <svg class="status-icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" />
+      </svg>
+      {{ statusText }}
+    </div>
   </div>
-  <div class="task-buttons">
-    <button class="btn-primary" [routerLink]=" ['/category', category().id, 'task' , task().id]">View Task</button>
-    <button class="btn-danger" (click)="onDelete()">Delete</button>
-    <button class="btn-info" (click)="onEdit()">Edit</button>
+
+  <div class="task-content">
+    <div class="task-details">
+      <p class="task-description">
+        <span class="description-label">Description:</span>{{ task().description || 'No description provided' }}
+      </p>
+      <div class="task-due">
+        <app-icon type="calendar" />
+        <span>{{ formatDate || 'No due date' }}</span>
+      </div>
+    </div>
+
+    <div class="task-actions">
+      <button class="btn btn-primary" [routerLink]="['/category', category().id, 'task', task().id]">
+        <app-icon type="view" />
+        View
+      </button>
+      <button class="btn btn-info" (click)="onEdit()">
+        <app-icon type="edit" />
+        Edit
+      </button>
+      <button class="btn btn-danger" (click)="onDelete()">
+        <app-icon type="delete" />
+        Delete
+      </button>
+    </div>
   </div>
 </div>

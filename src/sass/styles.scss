@@ -11,22 +11,25 @@ body {
 }
 
 button {
-  color: variables.$color-w;
-  border: none;
-  font-size: 0.85rem;
-  padding: 0.6rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 6px;
-  font-weight: 600;
-  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s;
+  color: variables.$color-w;
+  text-decoration: none;
+
   &.btn-primary {
     background-color: variables.$color-p;
     &:hover {
       background-color: variables.$color-p-l;
     }
   }
-
   &.btn-secondary {
     background-color: variables.$color-s;
     &:hover {

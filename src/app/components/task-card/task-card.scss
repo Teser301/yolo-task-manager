@@ -1,35 +1,76 @@
+@use "../../../sass/variables";
+
 .task-card {
-  background-color: #1e293b; // slightly lighter than category background
-  border: 1px solid #334155;
+  background-color: variables.$color-b-l;
+  border-left: 4px solid;
   border-radius: 8px;
-  padding: 1rem;
+  padding: 1.25rem;
   margin-bottom: 1rem;
-  color: #e2e8f0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  word-break: break-all;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  &:hover {
-    background-color: #273549;
+
+  .task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
   }
+
   .task-title {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #f1f5f9;
+    font-size: 1.1rem;
+    font-weight: 600;
     margin: 0;
+    color: variables.$color-w;
   }
+
+  .task-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .status-icon {
+    width: 12px;
+    height: 12px;
+    fill: currentColor;
+  }
+
+  .task-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
   .task-description {
+    margin: 0.5rem 0;
+    line-height: 1.5;
     white-space: pre-wrap;
     word-break: break-all;
-    .description-header {
+    .description-label {
       display: block;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+      color: variables.$color-w;
     }
   }
-  .task-buttons {
-    width: 100%;
+
+  .task-due {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    .due-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+  }
+
+  .task-actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
   }
 }

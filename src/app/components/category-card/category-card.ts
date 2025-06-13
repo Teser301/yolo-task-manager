@@ -4,10 +4,11 @@ import { Category } from '../../models/category.model';
 import { TaskCard } from '../task-card/task-card';
 import { CategoryService } from '../../services/category/category';
 import { ModalService } from '../../services/modal/modal';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-category-card',
-  imports: [RouterLink, TaskCard],
+  imports: [RouterLink, TaskCard, Icon],
   templateUrl: './category-card.html',
   styleUrl: './category-card.scss'
 })

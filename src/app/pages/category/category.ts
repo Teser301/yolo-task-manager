@@ -7,11 +7,12 @@ import { ModalService } from '../../services/modal/modal';
 import { TaskService } from '../../services/task/task';
 import { Task } from '../../models/task.model';
 import { Search } from '../../components/search/search';
+import { Icon } from "../../components/icon/icon";
 
 
 @Component({
   selector: 'app-category',
-  imports: [RouterLink, Search, TaskCard],
+  imports: [RouterLink, Search, TaskCard, Icon],
   templateUrl: './category.html',
   styleUrl: './category.scss'
 })

@@ -4,10 +4,11 @@ import { RouterLink } from '@angular/router';
 import { Category } from '../../models/category.model';
 import { TaskService } from '../../services/task/task';
 import { ModalService } from '../../services/modal/modal';
+import { Icon } from '../icon/icon';
 
 @Component({
   selector: 'app-task-card',
-  imports: [RouterLink],
+  imports: [RouterLink, Icon],
   templateUrl: './task-card.html',
   styleUrl: './task-card.scss'
 })

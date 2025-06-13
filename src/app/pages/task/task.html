@@ -1,56 +1,107 @@
 <section class="task-view">
     <div class="task-header">
-        <h1 class="task-view-title">Task Details</h1>
-        @if (task && category) {
-        <div class="task-badge" [style.background]="statusColor(task.status)">
-            {{ statusText(task.status) }}
+        <div class="header-content">
+            <h1 class="task-title">Task: {{ task?.title }}</h1>
+            @if (task && category) {
+            <div class="task-status" [style.color]="statusColor(task.status)">
+                <app-icon type="status" />
+                {{ statusText(task.status) }}
+            </div>
+            }
         </div>
-        }
     </div>
+    @if (loading) {
 
-    @if (task && category) {
-    <div class="task-detail">
-        <div class="task-info-group">
-            <div class="task-info-item">
-                <span class="info-label">Category</span>
-                <span class="info-value category">{{ category.title }}</span>
+    <div class="task-content">
+        <div class="task-meta">
+            <div class="meta-item">
+                <span class="meta-label">Category</span>
             </div>
-            <div class="task-info-item">
-                <span class="info-label">Due Date</span>
-                <span class="info-value">{{ formatDate(task.due) }}</span>
+            <div class="meta-item">
+                <div class="meta-item-container">
+                    <app-icon type="calendar" />
+                    <span class="meta-label">Due Date</span>
+                </div>
             </div>
         </div>
 
-        <div class="task-content">
-            <h2 class="task-title">{{ task.title }}</h2>
-            <div class="task-description">
-                <h3 class="description-title">Description</h3>
-                <p class="description-text">{{ task.description }}</p>
-            </div>
+        <div class="task-description">
+            <h3 class="description-title">
+                Description
+            </h3>
         </div>
 
         <div class="task-actions">
-            <button class="btn btn-secondary" (click)="returnToCategory()">
-                Back to Category
-            </button>
-            <div class="task-editor">
-                <button class="btn btn-info" (click)="onEditTask()">
-                    Edit
+            <div class="return-buttons">
+                <button class="btn btn-primary" routerLink="/">
+                    <app-icon type="return" />
+                    Back to Home
                 </button>
-                <button class="btn btn-danger" (click)="onDeleteTask()">
-                    Delete
+                <button class="btn btn-secondary" (click)="returnToCategory()">
+                    <app-icon type="return" />
+                    Back to Category
                 </button>
             </div>
 
+        </div>
+    </div>
+
+    } @else {
+
+    @if (task && category) {
+    <div class="task-content">
+        <div class="task-meta">
+            <div class="meta-item">
+                <span class="meta-label">Category</span>
+                <span class="meta-value">{{ category.title }}</span>
+            </div>
+            <div class="meta-item">
+                <div class="meta-item-container">
+                    <app-icon type="calendar" />
+                    <span class="meta-label">Due Date</span>
+                </div>
+                <span class="meta-value">{{ formatDate(task.due) || 'No due date' }}</span>
+            </div>
+        </div>
+
+        <div class="task-description">
+            <h3 class="description-title">
+                Description
+            </h3>
+            <p class="description-text">{{ task.description || 'No description provided' }}</p>
+        </div>
+
+        <div class="task-actions">
+            <div class="return-buttons">
+                <button class="btn btn-primary" routerLink="/">
+                    <app-icon type="return" />
+                    Back to Home
+                </button>
+                <button class="btn btn-secondary" (click)="returnToCategory()">
+                    <app-icon type="return" />
+                    Back to Category
+                </button>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-info" (click)="onEditTask()">
+                    <app-icon type="edit" />
+                    Edit Task
+                </button>
+                <button class="btn btn-danger" (click)="onDeleteTask()">
+                    <app-icon type="delete" />
+                    Delete
+                </button>
+            </div>
         </div>
     </div>
     } @else {
     <div class="task-not-found">
         <h3>Task Not Found</h3>
         <p>This task could not be found or may have been deleted.</p>
-        <button class="btn btn-back" (click)="returnToCategory()">
-            Return to Category
+        <button class="btn btn-danger" routerLink="/">
+            Back to Home
         </button>
     </div>
+    }
     }
 </section>

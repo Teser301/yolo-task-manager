@@ -1,6 +1,16 @@
 <section class="category-view">
-
-    @if (category) {
+    @if (loading) {
+    <div class="category-header">
+        <div>
+            <h1 class="category-title">Loading...</h1>
+            <p class="category-description">Loading...</p>
+            <p class="category-subtext">Following tasks assigned to this are:</p>
+        </div>
+    </div>
+    <div class="category-actions">
+        <button class="btn btn-secondary" routerLink="/">Return</button>
+    </div>
+    } @else { @if (category) {
     <div class="category-content">
         <div class="category-header">
             <div>
@@ -14,32 +24,42 @@
         </div>
         <div class="category-tasks">
             <h3 class="title">Tasks ({{ filteredTasks.length }})</h3>
-            @if (filteredTasks.length > 0) {
-            @for (task of filteredTasks; track task.id) {
+            @if (filteredTasks.length > 0) { @for (task of filteredTasks; track
+            task.id) {
             <app-task-card [task]="task" [category]="category" (taskDeleted)="handleTaskDeleted($event)" />
-            }
-            } @else {
+            } } @else {
             <p class="no-tasks">No tasks match your search.</p>
             }
         </div>
 
         <div class="category-actions">
-            <button class="btn btn-secondary" routerLink="/">Return</button>
+            <button class="btn btn-secondary" routerLink="/">
+                <app-icon type="return" />
+                Back to Category
+            </button>
             <div class="category-editor">
-                <button class="btn btn-danger" (click)="handleCategoryDeleted(category.id)">Delete</button>
-                <button class="btn-primary" (click)="handleTaskAdd(category.id)">Add Task</button>
-                <button class="btn-primary" (click)="handleCategoryEdit(category.id)">Edit Category</button>
+                <button class="btn-primary" (click)="handleTaskAdd(category.id)">
+                    <app-icon type="add" />Add Task
+                </button>
+                <button class="btn-info" (click)="handleCategoryEdit(category.id)">
+                    <app-icon type="edit" />Edit Category
+                </button>
+                <button class="btn btn-danger" (click)="handleCategoryDeleted(category.id)">
+                    <app-icon type="delete" />Delete
+                </button>
             </div>
         </div>
     </div>
     } @else {
     <div class="category-content category-error">
         <h1 class="category-error-title">Category not found</h1>
-        <p class="category-error-subtext">This category could not be found. Please report this</p>
+        <p class="category-error-subtext">
+            This category could not be found. Please report this
+        </p>
     </div>
-    <div class="category-content">
-        <button class="btn btn-secondary" routerLink="/">Return</button>
-    </div>
-    }
-
+    <button class="btn btn-secondary" routerLink="/">
+        <app-icon type="return" />
+        Back to Category
+    </button>
+    } }
 </section>

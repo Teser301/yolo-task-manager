@@ -6,11 +6,12 @@ import { CategoryService } from '../../services/category/category';
 import { Router } from '@angular/router';
 import { TaskService } from '../../services/task/task';
 import { ModalService } from '../../services/modal/modal';
+import { Icon } from '../../components/icon/icon';
 
 @Component({
   selector: 'app-task',
   standalone: true,
-  imports: [],
+  imports: [Icon],
   templateUrl: './task.html',
   styleUrl: './task.scss'
 })
