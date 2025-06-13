@@ -239,8 +239,8 @@ async function main() {
       frontendProcess.kill();
       process.exit(0);
     });
-  } catch (error) {
-    error("Setup failed:", error.message);
+  } catch (err) {
+    error("Setup failed:", err.message);
     process.exit(1);
   }
 }
