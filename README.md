@@ -43,9 +43,15 @@ python3 -m venv venv
 ```
 ## Running the backend
 Run this to enter the virtual enviroment
+### Windows
 ```bash
 .\venv\Scripts\activate
 ```
+### macOS/Linux
+```bash
+.\venv\bin\activate
+```
+
 ## Finally, run the backend
 ```bash
 Fastapi dev
