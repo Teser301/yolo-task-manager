@@ -53,13 +53,15 @@ button {
 .title {
   font-weight: 600;
   margin-bottom: 1.5rem;
-  color: #f9fafb; // Bright heading
-  border-bottom: 2px solid #374151;
+  border-bottom: 2px solid variables.$color-g;
   padding-bottom: 0.5rem;
 }
 .error {
-  background-color: #dc2626;
+  background-color: variables.$color-d;
   border-radius: 6px;
   padding: 5px;
   margin-top: 0.25rem;
+}
+.warning {
+  color: variables.$color-d;
 }

@@ -10,7 +10,8 @@
 
     <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="form-container">
         <div class="form-group">
-            <label [for]="modalService.modalType + '-title'" class="form-label">Title*</label>
+            <label [for]="modalService.modalType + '-title'" class="form-label">Title <span
+                    class="warning">*</span></label>
             <input [id]="modalService.modalType + '-title'" formControlName="title" placeholder="Title"
                 class="form-input" autocomplete="off" />
 
@@ -21,7 +22,8 @@
             }
         </div>
         <div class="form-group">
-            <label [for]="modalService.modalType + '-description'" class="form-label">Description*</label>
+            <label [for]="modalService.modalType + '-description'" class="form-label">Description <span
+                    class="warning">*</span></label>
             <textarea rows="10" cols="50" [id]="modalService.modalType + '-description'" formControlName="description"
                 placeholder="Add description" class="form-textarea" autocomplete="off"></textarea>
             @if (categoryForm.get('description')?.touched && categoryForm.get('description')?.errors?.['required']) {
