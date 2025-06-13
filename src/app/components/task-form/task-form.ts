@@ -69,9 +69,10 @@ export class TaskForm implements OnInit {
   private checkForEditMode() {
     const { modalType, editingTask } = this.modalService;
     if (modalType === 'edit' && editingTask) {
-      const formattedDate = editingTask.due
-        ? new Date(editingTask.due).toISOString().split('T')[0]
-        : this.getToday();
+      const date = new Date(editingTask.due);
+      const formattedDate = date.getFullYear() + '-' +
+        String(date.getMonth() + 1).padStart(2, '0') + '-' +
+        String(date.getDate()).padStart(2, '0');
 
       this.taskForm.patchValue({
         title: editingTask.title,

@@ -13,10 +13,10 @@
     <div class="category-content">
         <div class="category-header">
             <div>
-                <h1 class="category-title">Category:{{category.title}}</h1>
+                <h1 class="category-title">Category: {{category.title}}</h1>
                 <p class="category-description">
                     <span>
-                        Description:
+                        Description
                     </span>
                     {{category.description}}
                 </p>
@@ -36,9 +36,9 @@
         </div>
 
         <div class="category-actions">
-            <button class="btn btn-secondary" routerLink="/">
+            <button class="btn btn-primary" routerLink="/">
                 <app-icon type="return" />
-                Back to Category
+                Back to Home
             </button>
             <div class="category-editor">
                 <button class="btn-primary" (click)="handleTaskAdd(category.id)">
