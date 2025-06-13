@@ -12,11 +12,9 @@
             <label [for]="modalService.modalType + '-title'" class="form-label">Title</label>
             <input [id]="modalService.modalType + '-title'" class="form-input" formControlName="title"
                 placeholder="Title" type="text" autocomplete="off" />
-            @if (taskForm.get('title')?.touched && taskForm.get('title')?.invalid) {
+            @if (taskForm.get('title')?.touched && taskForm.get('title')?.errors?.['required']) {
             <div class="error">
-                @if (taskForm.get('title')?.errors?.['required']) {
                 <small>Title is required.</small>
-                }
             </div>
             }
         </div>
@@ -26,11 +24,9 @@
             <label [for]="modalService.modalType + '-description'" class="form-label">Description</label>
             <textarea [id]="modalService.modalType + '-description'" class="form-input" formControlName="description"
                 placeholder="Add description" autocomplete="off"></textarea>
-            @if (taskForm.get('description')?.touched && taskForm.get('description')?.invalid) {
+            @if (taskForm.get('description')?.touched && taskForm.get('description')?.errors?.['required']) {
             <div class="error">
-                @if (taskForm.get('description')?.errors?.['required']) {
                 <small>Description is required.</small>
-                }
             </div>
             }
         </div>
@@ -44,11 +40,10 @@
                 <option [value]="category.id">{{ category.title }}</option>
                 }
             </select>
-            @if (taskForm.get('category_id')?.touched && taskForm.get('category_id')?.invalid) {
+
+            @if (taskForm.get('category_id')?.touched && taskForm.get('category_id')?.errors?.['required']) {
             <div class="error">
-                @if (taskForm.get('category_id')?.errors?.['required']) {
-                <small>Please Choose a Category</small>
-                }
+                <small>Category is required.</small>
             </div>
             }
         </div>
@@ -58,11 +53,9 @@
             <label [for]="modalService.modalType + '-due'">Due Date</label>
             <input [id]="modalService.modalType + '-due'" type="date" formControlName="due" class="form-input"
                 autocomplete="off" />
-            @if (taskForm.get('due')?.touched && taskForm.get('due')?.invalid) {
+            @if (taskForm.get('due')?.touched && taskForm.get('due')?.errors?.['required']) {
             <div class="error">
-                @if (taskForm.get('due')?.errors?.['required']) {
                 <small>Due date is required.</small>
-                }
             </div>
             }
         </div>
@@ -76,7 +69,11 @@
                 <option [value]="3">Done</option>
             </select>
         </div>
-
+        @if (errorMessage) {
+        <div class="error">
+            {{ errorMessage }}
+        </div>
+        }
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">
                 {{ modalService.modalType === 'add' ? 'Create' : 'Update Task' }}

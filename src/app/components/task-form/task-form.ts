@@ -16,6 +16,8 @@ import { Subscription } from 'rxjs';
 export class TaskForm implements OnInit {
   taskForm: FormGroup;
   categories: Category[] = [];
+  isSubmitting: boolean = false;
+  errorMessage: string | null = null;
   private categoriesSubscription?: Subscription;
 
   constructor(
@@ -90,6 +92,7 @@ export class TaskForm implements OnInit {
 
   onSubmit() {
     if (this.taskForm.valid) {
+      this.errorMessage = null;
       if (this.modalService.modalType === 'add') {
         this.createTask();
       } else {
@@ -97,6 +100,7 @@ export class TaskForm implements OnInit {
       }
     } else {
       console.log('Form is invalid - Errors:', this.taskForm.errors);
+      this.errorMessage = 'Please fill all required inputs';
     }
   }
 
@@ -125,8 +129,7 @@ export class TaskForm implements OnInit {
     });
   }
 
-  //Helpers
-
+  //// Helpers
   // Get today for inputs
   private getToday(): string {
     const today = new Date();
@@ -137,8 +140,13 @@ export class TaskForm implements OnInit {
     this.resetForm();
   }
   private handleError(action: string, err: any) {
-    console.error(`Error ${action} task:`, err);
-    alert(`Failed to ${action} task. Please try again.`);
+    this.isSubmitting = false;
+    if (err.status === 400) {
+      this.errorMessage = 'A task with this name already exists';
+    } else {
+      this.errorMessage = 'Failed to create task. Please try again.';
+      console.error('Error creating task:', err);
+    }
   }
   private resetForm() {
     this.taskForm.reset({

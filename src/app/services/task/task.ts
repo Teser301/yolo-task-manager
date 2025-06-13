@@ -9,7 +9,10 @@ import { Task } from '../../models/task.model';
 export class TaskService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8000';
-
+  private endpoints = {
+    tasks: `${this.apiUrl}/tasks`,
+    taskById: (id: number) => `${this.apiUrl}/tasks/${id}`
+  };
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   public tasks$ = this.tasksSubject.asObservable();
 
@@ -18,7 +21,8 @@ export class TaskService {
   }
 
   private loadAllTasks(): void {
-    this.http.get<Task[]>(`${this.apiUrl}/tasks`).pipe(
+
+    this.http.get<Task[]>(this.endpoints.tasks).pipe(
       catchError(err => {
         console.error('Error loading tasks', err);
         return of([]);
@@ -27,7 +31,7 @@ export class TaskService {
   }
 
   getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl}/tasks`).pipe(
+    return this.http.get<Task[]>(this.endpoints.tasks).pipe(
       tap(tasks => this.tasksSubject.next(tasks)),
       catchError(err => {
         console.error('Error fetching tasks', err);
@@ -37,11 +41,11 @@ export class TaskService {
   }
 
   getTaskById(id: number): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/tasks/${id}`);
+    return this.http.get<Task>(this.endpoints.taskById(id));
   }
 
   createNewTask(task: Task): Observable<Task> {
-    return this.http.post<Task>(`${this.apiUrl}/tasks`, task).pipe(
+    return this.http.post<Task>(this.endpoints.tasks, task).pipe(
       tap((newTask) => {
         // Add the newly created task only after server confirmation
         this.tasksSubject.next([...this.tasksSubject.value, newTask]);
@@ -55,11 +59,10 @@ export class TaskService {
 
   deleteTask(id: number): Observable<void> {
     const currentTasks = this.tasksSubject.value;
-
     // Optimistic update
     this.tasksSubject.next(currentTasks.filter(task => task.id !== id));
 
-    return this.http.delete<void>(`${this.apiUrl}/tasks/${id}`).pipe(
+    return this.http.delete<void>(this.endpoints.taskById(id)).pipe(
       catchError(err => {
         // Revert optimistic update
         this.tasksSubject.next(currentTasks);
@@ -80,7 +83,7 @@ export class TaskService {
       currentTasks.map(t => t.id === id ? { ...t, ...updatedTask } : t)
     );
 
-    return this.http.put<Task>(`${this.apiUrl}/tasks/${id}`, taskToSend).pipe(
+    return this.http.put<Task>(this.endpoints.taskById(id), taskToSend).pipe(
       tap((returnedTask) => {
         // Update with server response
         const updated = currentTasks.map(t => t.id === id ? returnedTask : t);

@@ -48,11 +48,11 @@ export class CategoryForm {
       }
     } else {
       console.log('Form is invalid - Errors:', this.categoryForm.errors);
-      this.errorMessage = 'Make sure you filled in the form';
+      this.errorMessage = 'Please fill all required inputs';
     }
   }
   // Create Category
-  createCategory() {
+  private createCategory() {
     this.isSubmitting = true;
     const formData: Category = {
       ...this.categoryForm.value,
@@ -60,30 +60,12 @@ export class CategoryForm {
     };
 
     this.categoryService.createNewCategory(formData).subscribe({
-      next: () => {
-        this.isSubmitting = false;
-        this.modalService.closeModal();
-        this.categoryForm.reset();
-      },
-      error: (err) => {
-        this.isSubmitting = false;
-        console.log(err)
-
-        if (err.status === 400) {
-          // Handle duplicate category error
-          this.errorMessage = 'A category with this name already exists';
-        } else {
-          this.errorMessage = 'Failed to create category. Please try again.';
-          console.error('Error creating category:', err);
-        }
-      }
+      next: () => this.handleSuccess(),
+      error: (err) => this.handleError('creating', err)
     });
   }
-  showError(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
   // Edit Category
-  editCategory() {
+  private editCategory() {
     const currentCategory = this.modalService.getCurrentModalCategory();
 
     if (!currentCategory) return;
@@ -103,5 +85,22 @@ export class CategoryForm {
       }
 
     });
+  }
+
+  private handleSuccess() {
+    this.isSubmitting = false;
+    this.modalService.closeModal();
+    this.categoryForm.reset();
+
+  }
+
+  private handleError(action: string, err: any) {
+    this.isSubmitting = false;
+    if (err.status === 400) {
+      this.errorMessage = 'A category with this name already exists';
+    } else {
+      this.errorMessage = 'Failed to create category. Please try again.';
+      console.error('Error creating category:', err);
+    }
   }
 }

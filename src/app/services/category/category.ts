@@ -10,6 +10,11 @@ import { TaskService } from '../task/task';
 export class CategoryService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8000';
+  private endpoints = {
+    categories: `${this.apiUrl}/categories`,
+    categoryById: (id: number) => `${this.apiUrl}/categories/${id}`
+  };
+
   private taskService = inject(TaskService);  // Add this with other injections
   // All categories
   private allCategoriesSubject = new BehaviorSubject<Category[]>([]);
@@ -50,7 +55,6 @@ export class CategoryService {
   // Get All Categories
   getCategories(): Observable<Category[]> {
     const currentCategories = this.allCategoriesSubject.value;
-
     if (currentCategories.length === 0) {
       return this.fetchCategoriesFromServer().pipe(
         map(() => {
@@ -69,13 +73,11 @@ export class CategoryService {
   }
   // Get category by ID
   getCategoryById(id: number): Observable<Category> {
-    var url = `${this.apiUrl}/categories/${id}`
-    return this.http.get<Category>(url);
+    return this.http.get<Category>(this.endpoints.categoryById(id));
   }
 
   // Create and Delete with Optimistic Behaviour
   createNewCategory(category: Category): Observable<Category> {
-    const url = `${this.apiUrl}/categories`;
     const current = this.allCategoriesSubject.value;
 
     // First check for duplicate name
@@ -94,19 +96,16 @@ export class CategoryService {
     const tempId = Math.floor(Math.random() * -10000);
     const optimisticCategory: Category = { ...category, id: tempId };
 
-    // Then add it to the UI, expecting it to be there already
     this.allCategoriesSubject.next([...current, optimisticCategory]);
 
-    return this.http.post<Category>(url, category).pipe(
+    return this.http.post<Category>(this.endpoints.categories, category).pipe(
       tap((newCategory) => {
-        // Replace the temp category with the real one when it's done
         const updated = this.allCategoriesSubject.value.map(c =>
           c.id === tempId ? newCategory : c
         );
         this.allCategoriesSubject.next(updated);
       }),
       catchError(err => {
-        // If it turns out it wasn't there
         this.allCategoriesSubject.next(current);
         return throwError(() => err);
       })
@@ -114,16 +113,12 @@ export class CategoryService {
   }
 
   deleteCategory(id: number): Observable<void> {
-    const url = `${this.apiUrl}/categories/${id}`;
     const currentCategories = this.allCategoriesSubject.value;
-
     // Optimistic update - remove category first
     this.allCategoriesSubject.next(currentCategories.filter(c => c.id !== id));
-
     // Also remove all tasks for this category (optimistically)
     this.taskService.deleteTasksForCategory(id);  // You'll need to implement this in TaskService
-
-    return this.http.delete<void>(url).pipe(
+    return this.http.delete<void>(this.endpoints.categoryById(id)).pipe(
       catchError(err => {
         // Revert both categories and tasks on error
         this.allCategoriesSubject.next(currentCategories);
@@ -143,7 +138,7 @@ export class CategoryService {
       current.map(c => c.id === id ? { ...c, ...category } : c)
     );
 
-    return this.http.put<Category>(url, category).pipe(
+    return this.http.put<Category>(this.endpoints.categoryById(id), category).pipe(
       tap(updatedCategory => {
         // Update with the actual server response
         const newState = current.map(c => c.id === id ? updatedCategory : c);
