@@ -1,17 +1,11 @@
 <section class="task-view">
+
+    @if (loading) {
     <div class="task-header">
         <div class="header-content">
-            <h1 class="task-title">Task: {{ task?.title }}</h1>
-            @if (task && category) {
-            <div class="task-status" [style.color]="statusColor(task.status)">
-                <app-icon type="status" />
-                {{ statusText(task.status) }}
-            </div>
-            }
+            <h1 class="task-title">Task:</h1>
         </div>
     </div>
-    @if (loading) {
-
     <div class="task-content">
         <div class="task-meta">
             <div class="meta-item">
@@ -49,6 +43,17 @@
     } @else {
 
     @if (task && category) {
+    <div class="task-header">
+        <div class="header-content">
+            <h1 class="task-title">Task: {{ task.title }}</h1>
+            @if (task && category) {
+            <div class="task-status" [style.color]="statusColor(task.status)">
+                <app-icon type="status" />
+                {{ statusText(task.status) }}
+            </div>
+            }
+        </div>
+    </div>
     <div class="task-content">
         <div class="task-meta">
             <div class="meta-item">
