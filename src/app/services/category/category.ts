@@ -30,7 +30,6 @@ export class CategoryService {
     map(([categories, filterFn]) => categories.filter(filterFn))
   );
 
-  filteredCategories$ = this.categories$;
   allCategories$ = this.allCategoriesSubject.asObservable();
   category$ = this.categorySubject.asObservable();
 
@@ -52,25 +51,7 @@ export class CategoryService {
   loadCategories(): Observable<Category[]> {
     return this.fetchCategoriesFromServer();
   }
-  // Get All Categories
-  getCategories(): Observable<Category[]> {
-    const currentCategories = this.allCategoriesSubject.value;
-    if (currentCategories.length === 0) {
-      return this.fetchCategoriesFromServer().pipe(
-        map(() => {
-          const categories = this.allCategoriesSubject.value;
-          const filterFn = this.filterFnSubject.value;
-          return categories.filter(filterFn);
-        })
-      );
-    } else {
-      const filterFn = this.filterFnSubject.value;
-      return new Observable(observer => {
-        observer.next(currentCategories.filter(filterFn));
-        observer.complete();
-      });
-    }
-  }
+
   // Get category by ID
   getCategoryById(id: number): Observable<Category> {
     return this.http.get<Category>(this.endpoints.categoryById(id));
@@ -128,7 +109,6 @@ export class CategoryService {
     );
   }
 
-  // Edit categories
   editCategory(id: number, category: Category): Observable<Category> {
     const url = `${this.apiUrl}/categories/${id}`;
     const current = this.allCategoriesSubject.value;
@@ -154,21 +134,6 @@ export class CategoryService {
   }
 
   // Filter
-
-  setCategoryFilter(fn: (c: Category) => boolean): void {
-    this.filterFnSubject.next(fn);
-  }
-
-  clearCategoryFilter(): void {
-    this.filterFnSubject.next(() => true);
-  }
-
-  // Helper method to get current filtered categories synchronously
-  getCurrentFilteredCategories(): Category[] {
-    const categories = this.allCategoriesSubject.value;
-    const filterFn = this.filterFnSubject.value;
-    return categories.filter(filterFn);
-  }
 
   // Helper method to check if categories are loaded
   get hasLoadedCategories(): boolean {
