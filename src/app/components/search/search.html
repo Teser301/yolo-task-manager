@@ -1,11 +1,10 @@
 <div class="search-controls" [formGroup]="searchForm">
-    <input type="text" formControlName="searchTerm" placeholder="Search categories and tasks..." />
+    <input class="search-input" type="text" formControlName="searchTerm" placeholder="Search categories and tasks..." />
 
-    <select formControlName="sortBy">
+    <select class="search-select" formControlName="sortBy">
         <option value="title">Sort by Name (A-Z)</option>
         <option value="nameReverse">Sort by Name (Z-A)</option>
         @if (searchMode() === "category") {
-
         <option value="taskCount">Sort by Task Count (High-Low)</option>
         <option value="taskCountReverse">Sort by Task Count (Low-High)</option>
         }
@@ -15,6 +14,5 @@
         <option value="taskDateAsc">Sort by Earliest Due Date</option>
         <option value="taskDateDesc">Sort by Latest Due Date</option>
         }
-
     </select>
 </div>

@@ -4,7 +4,6 @@
         <div>
             <h1 class="category-title">Loading...</h1>
             <p class="category-description">Loading...</p>
-            <p class="category-subtext">Following tasks assigned to this are:</p>
         </div>
     </div>
     <div class="category-actions">
@@ -15,8 +14,12 @@
         <div class="category-header">
             <div>
                 <h1 class="category-title">{{category.title}}</h1>
-                <p class="category-description">{{category.description}}</p>
-                <p class="category-subtext">Following tasks assigned to this are:</p>
+                <p class="category-description">
+                    <span>
+                        Description:
+                    </span>
+                    {{category.description}}
+                </p>
             </div>
         </div>
         <div>

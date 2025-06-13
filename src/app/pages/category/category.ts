@@ -21,13 +21,13 @@ export class CategoryView implements OnInit {
   loading: boolean = false;
   filteredTasks: Task[] = [];
   searchTerm: string = '';
+  destroyRef: DestroyRef | undefined;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private categoryService = inject(CategoryService);
   private taskService = inject(TaskService);
   private modalService = inject(ModalService);
-  destroyRef: DestroyRef | undefined;
 
   ngOnInit() {
     const id = Number(this.route.parent?.snapshot.paramMap.get('categoryId'));

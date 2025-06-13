@@ -6,10 +6,11 @@ import { TaskService } from '../../services/task/task';
 import { CategoryService } from '../../services/category/category';
 import { Category } from '../../models/category.model';
 import { Subscription } from 'rxjs';
+import { Icon } from "../icon/icon";
 
 @Component({
   selector: 'app-task-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Icon],
   templateUrl: './task-form.html',
   styleUrl: './task-form.scss'
 })

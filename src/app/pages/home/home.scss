@@ -7,11 +7,14 @@
   margin: 2rem auto;
   border-radius: 12px;
   max-width: 900px;
-
   font-family: "Inter", sans-serif;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  @media (max-width: variables.$screen-sm) {
+    margin: 0 auto;
+    padding: 10px 15px;
+  }
   .task-header {
     .title {
       font-size: 2rem;
@@ -21,8 +24,15 @@
       display: flex;
       justify-content: space-between;
       gap: 20px;
+      @media (max-width: variables.$screen-sm) {
+        flex-direction: column;
+        gap: 10px;
+      }
       button {
         width: 100%;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 1rem;
       }
     }
   }

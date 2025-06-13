@@ -3,10 +3,11 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ModalService } from '../../services/modal/modal';
 import { Category } from '../../models/category.model';
 import { CategoryService } from '../../services/category/category';
+import { Icon } from "../icon/icon";
 
 @Component({
   selector: 'app-category-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, Icon],
   templateUrl: './category-form.html',
   styleUrl: './category-form.scss'
 })

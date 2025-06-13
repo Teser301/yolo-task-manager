@@ -31,20 +31,6 @@ export class TaskService {
     ).subscribe(tasks => this.tasksSubject.next(tasks));
   }
 
-  // getTasks(): Observable<Task[]> {
-  //   return this.http.get<Task[]>(this.endpoints.tasks).pipe(
-  //     tap(tasks => this.tasksSubject.next(tasks)),
-  //     catchError(err => {
-  //       console.error('Error fetching tasks', err);
-  //       return throwError(() => err);
-  //     })
-  //   );
-  // }
-
-  // getTaskById(id: number): Observable<Task> {
-  //   return this.http.get<Task>(this.endpoints.taskById(id));
-  // }
-
   createNewTask(task: Task): Observable<Task> {
     return this.http.post<Task>(this.endpoints.tasks, task).pipe(
       tap((newTask) => {

@@ -103,6 +103,9 @@ export class TaskView {
       this.router.navigate(['/']); // Fallback to home if no category ID
     }
   }
+  returnToHome() {
+    this.router.navigate(['/']);
+  }
 
   statusText(status: number): string {
     return this.taskService.getStatusText(status);

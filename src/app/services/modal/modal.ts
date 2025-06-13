@@ -10,7 +10,6 @@ export class ModalService {
   showCategoryModal = false
   showTaskModal = false
   modalType: 'edit' | 'add' | null = null;
-
   editingTask: Task | null = null;
   preselectedCategoryId: number | null = null;
 

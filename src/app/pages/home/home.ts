@@ -20,6 +20,7 @@ export class Home {
   filteredCategories: Category[] = [];
   searchTerm: string = '';
   searchMode = 'category'
+
   private destroyRef = inject(DestroyRef);
   private taskService = inject(TaskService);
   private categoryService = inject(CategoryService);

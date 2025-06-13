@@ -28,7 +28,13 @@
       font-size: 1rem;
       margin-bottom: 1rem;
       color: variables.$color-w;
-      white-space: pre-wrap;
+      word-break: break-word;
+      span {
+        display: block;
+        border-bottom: 2px solid variables.$color-g-d;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+      }
     }
   }
 

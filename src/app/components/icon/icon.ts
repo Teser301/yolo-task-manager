@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-export type IconType = 'calendar' | 'view' | 'edit' | 'delete' | 'status' | 'add' | 'return';
+export type IconType = 'calendar' | 'view' | 'edit' | 'delete' | 'status' | 'add' | 'return' | 'cancel';
 
 @Component({
   selector: 'app-icon',
@@ -25,6 +25,8 @@ export class Icon {
         return 'M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z';
       case 'return':
         return 'M10 9V5l-7 7 7 7v-4h4.5c2.5 0 4.5 2 4.5 4.5V21h2v-1.5c0-3.6-2.9-6.5-6.5-6.5H10z';
+      case 'cancel':
+        return 'M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z';
       default:
         return '';
     }

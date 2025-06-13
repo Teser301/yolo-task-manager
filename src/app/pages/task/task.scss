@@ -96,7 +96,7 @@
     .description-text {
       line-height: 1.6;
       color: variables.$color-w;
-      white-space: pre-wrap;
+      word-break: break-word;
     }
   }
 

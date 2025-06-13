@@ -5,12 +5,18 @@
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 2rem;
+  @media (max-width: variables.$screen-sm) {
+    padding: 10px;
+  }
 
   .category-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    @media (max-width: variables.$screen-sm) {
+      flex-direction: column;
+    }
   }
 
   .category-title {
@@ -26,6 +32,10 @@
   .category-status {
     font-size: 0.85rem;
     text-align: right;
+    @media (max-width: variables.$screen-sm) {
+      text-align: center;
+      margin: 5px;
+    }
   }
 
   .category-content {
@@ -37,8 +47,7 @@
   .category-description {
     margin: 0.5rem 0;
     line-height: 1.5;
-    white-space: pre-wrap;
-
+    word-break: break-word;
     .description-label {
       display: block;
       font-weight: 500;

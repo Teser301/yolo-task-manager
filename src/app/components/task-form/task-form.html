@@ -3,7 +3,9 @@
         <h2 class="form-title">
             {{ modalService.modalType === 'add' ? 'Add New Task' : 'Edit Task' }}
         </h2>
-        <button class="btn-danger" (click)="modalService.closeModal()">X</button>
+        <button class="btn-danger" (click)="modalService.closeModal()">
+            <app-icon type="cancel" />
+        </button>
     </div>
 
     <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="form-container">
@@ -22,8 +24,8 @@
         <!--Description-->
         <div class="form-group">
             <label [for]="modalService.modalType + '-description'" class="form-label">Description</label>
-            <textarea [id]="modalService.modalType + '-description'" class="form-input" formControlName="description"
-                placeholder="Add description" autocomplete="off"></textarea>
+            <textarea rows="10" cols="50" [id]="modalService.modalType + '-description'" class="form-input"
+                formControlName="description" placeholder="Add description" autocomplete="off"></textarea>
             @if (taskForm.get('description')?.touched && taskForm.get('description')?.errors?.['required']) {
             <div class="error">
                 <small>Description is required.</small>
@@ -75,12 +77,10 @@
         </div>
         }
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">
-                {{ modalService.modalType === 'add' ? 'Create' : 'Update Task' }}
+            <button class="btn-primary" type="submit" [disabled]="isSubmitting">
+                <app-icon type="edit" />
+                {{ modalService.modalType === 'add' ? 'Create' : 'Save Changes' }}
             </button>
-            @if (modalService.modalType === 'add') {
-            <button type="button" class="btn btn-secondary" (click)="modalService.closeModal()">Cancel</button>
-            }
         </div>
     </form>
 </section>
