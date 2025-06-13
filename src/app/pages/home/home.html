@@ -12,19 +12,21 @@
         <app-search (searchChanged)="onSearch($event)" searchMode="category" />
     </div>
     <div class="category-list">
-        @defer (when filteredCategories.length > 0) {
+        @if (loading) {
+        <div class="loading-message">Loading categories...</div>
+        } @else {
+        @if (filteredCategories.length > 0) {
         <div class="category-list">
             @for (category of filteredCategories; track category.id) {
             <app-category-card [category]="category" (categoryDeleted)="handleCategoryDeleted($event)"
                 (edit)="handleCategoryEdit($event)" (taskDeleted)="handleTaskDeleted($event)" />
             }
         </div>
-        } @placeholder {
-        <div class="skeleton-list">
-            @for (i of [1,2,3]; track i) {
-            <div class="skeleton-card"></div>
-            }
+        } @else {
+        <div class="empty-message">
+            No categories found. Create your first category to get started!
         </div>
+        }
         }
     </div>
 </div>

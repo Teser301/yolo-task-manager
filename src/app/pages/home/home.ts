@@ -20,6 +20,7 @@ export class Home {
   filteredCategories: Category[] = [];
   searchTerm: string = '';
   searchMode = 'category'
+  loading = true
 
   private destroyRef = inject(DestroyRef);
   private taskService = inject(TaskService);
@@ -36,7 +37,13 @@ export class Home {
   private initializeData(): void {
     if (!this.categoryService.hasLoadedCategories) {
       this.categoryService.loadCategories().subscribe({
-        error: (err) => console.error('Failed to fetch categories', err)
+        next: () => {
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Failed to fetch categories', err)
+          this.loading = false;
+        }
       });
     }
   }
@@ -45,14 +52,20 @@ export class Home {
     combineLatest([
       this.categoryService.allCategories$,
       this.taskService.tasks$
-
     ])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([categories, tasks]) => {
-        this.categories = categories.map(category => ({
-          ...category,
-          tasks: tasks.filter(task => task.category_id === category.id)
-        }));
+      .subscribe({
+        next: ([categories, tasks]) => {
+          this.categories = categories.map(category => ({
+            ...category,
+            tasks: tasks.filter(task => task.category_id === category.id)
+          }));
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error loading data', err);
+          this.loading = false;
+        }
       });
 
     combineLatest([
@@ -60,22 +73,28 @@ export class Home {
       this.taskService.tasks$
     ])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([filteredCategories, tasks]) => {
-        const categoriesWithTasks = filteredCategories.map(category => ({
-          ...category,
-          tasks: tasks.filter(task => task.category_id === category.id)
-        }));
+      .subscribe({
+        next: ([filteredCategories, tasks]) => {
+          const categoriesWithTasks = filteredCategories.map(category => ({
+            ...category,
+            tasks: tasks.filter(task => task.category_id === category.id)
+          }));
 
-        this.filteredCategories = this.filterAndSortCategories(
-          categoriesWithTasks,
-          this.searchTerm,
-          'title'
-        );
+          this.filteredCategories = this.filterAndSortCategories(
+            categoriesWithTasks,
+            this.searchTerm,
+            'title'
+          );
+        },
+        error: (err) => {
+          console.error('Error loading filtered data', err);
+        }
       });
   }
   // On use
   onCreateCategory() {
     this.modalService.showAddCategory();
+
   }
 
   onCreateTask() {
@@ -89,23 +108,31 @@ export class Home {
 
   onSearch(event: SearchEvent) {
     this.searchTerm = event.term;
+    this.loading = true;
     // Re-apply search/sort to current filtered categories
     combineLatest([
       this.categoryService.categories$,
       this.taskService.tasks$
     ])
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(([filteredCategories, tasks]) => {
-        const categoriesWithTasks = filteredCategories.map(category => ({
-          ...category,
-          tasks: tasks.filter(task => task.category_id === category.id)
-        }));
+      .subscribe({
+        next: ([filteredCategories, tasks]) => {
+          const categoriesWithTasks = filteredCategories.map(category => ({
+            ...category,
+            tasks: tasks.filter(task => task.category_id === category.id)
+          }));
 
-        this.filteredCategories = this.filterAndSortCategories(
-          categoriesWithTasks,
-          event.term,
-          event.sortBy
-        );
+          this.filteredCategories = this.filterAndSortCategories(
+            categoriesWithTasks,
+            event.term,
+            event.sortBy
+          );
+          this.loading = false; // Search complete
+        },
+        error: (err) => {
+          console.error('Error during search', err);
+          this.loading = false;
+        }
       });
   }
 

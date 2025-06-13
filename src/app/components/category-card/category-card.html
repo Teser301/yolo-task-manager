@@ -5,7 +5,7 @@
 
             <div class="category-status">
                 <!-- <app-icon type="category" /> -->
-                {{ category().tasks?.length || 0 }} tasks
+                {{ category().tasks.length || 0 }} tasks
             </div>
             <div class="category-actions">
                 <button class="btn btn-primary" routerLink="/category/{{category().id}}">
