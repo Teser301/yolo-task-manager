@@ -9,7 +9,7 @@ Prerequisites:
 
 Python 3.8+
 
-Node.js 16+ 
+Node.js 22+ 
 
 ```bash
 npm run start-project
@@ -43,9 +43,15 @@ python3 -m venv venv
 ```
 ## Running the backend
 Run this to enter the virtual enviroment
+### Windows
 ```bash
 .\venv\Scripts\activate
 ```
+### macOS/Linux
+```bash
+source venv/bin/activate
+```
+
 ## Finally, run the backend
 ```bash
 Fastapi dev
