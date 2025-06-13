@@ -1,59 +1,50 @@
 # YoloTaskManager
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0 with a [FastAPI](https://fastapi.tiangolo.com/) backend.
 
-## Development server
+## Project Setup and Startup
 
-To start a local development server, run:
-
+## Quick Start (Recommended)
+To start both frontend and backend services with a single command:
 ```bash
-ng serve
+npm run run-project.js
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Manual Start
+If there are issues to the quick start command. It is possible to manually start it
+### For the frontend
+Simply start from the root and type
 
 ```bash
-ng generate --help
+npm start
 ```
 
-## Building
-
-To build the project run:
+### For the backend
+Navigate to the task-backend in the terminal
 
 ```bash
-ng build
+cd task-backend
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
+## Generate the backend
+You only need to do this once, afterwhich you can skip to running it
+### Windows
 ```bash
-ng test
+python -m venv venv
 ```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
+### macOS/Linux
 ```bash
-ng e2e
+python3 -m venv venv
+```
+## Running the backend
+Run this to enter the virtual enviroment
+```bash
+.\venv\Scripts\activate
+```
+## Finally, run the backend
+```bash
+Fastapi dev
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
-## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
