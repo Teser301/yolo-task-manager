@@ -2,15 +2,14 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0 with a [FastAPI](https://fastapi.tiangolo.com/) backend.
 
-# Quick Start (Recommended)
-Added a small script to run both front-end and back-end with minimal input required.
-
-Prerequisites:
+## Prerequisites:
 
 Python 3.8+
 
 Node.js 22+ 
 
+# Quick Start (Recommended)
+Added a small script to run both front-end and back-end with minimal input required.
 ```bash
 npm run start-project
 ```
@@ -39,8 +38,8 @@ Navigate to the task-backend in the terminal.
 cd task-backend
 ```
 
-## Generate the backend
-You only need to do this once, afterwhich you can skip to running it.
+#### Generate the backend
+This initializes the venv folder for the project. You only need to generate this once. After that you can skip this segment.
 ### Windows
 ```bash
 python -m venv venv
@@ -60,7 +59,7 @@ Run this to enter the virtual enviroment.
 source venv/bin/activate
 ```
 
-Then to run the backend inside the enviroment.
+Once inside, you can initiate the back-end with this command.
 ```bash
 Fastapi dev
 ```
