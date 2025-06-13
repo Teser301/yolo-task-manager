@@ -44,12 +44,34 @@ function checkDirectories() {
   success("Project directories validated");
   return true;
 }
-
+function getPythonCommand() {
+  try {
+    execSync("python3 --version", { stdio: "ignore" });
+    return "python3";
+  } catch {
+    try {
+      execSync("python --version", { stdio: "ignore" });
+      return "python";
+    } catch {
+      error(
+        "Neither 'python3' nor 'python' is available. Please install Python 3."
+      );
+      error(
+        "Python 3 not found. You can install it using Homebrew: brew install python"
+      );
+      process.exit(1);
+    }
+  }
+}
 function createVenvIfNeeded() {
+  const pythonCmd = getPythonCommand();
   if (!fs.existsSync(venvDir)) {
     log("Creating virtual environment...");
     try {
-      execSync(`python -m venv venv`, { cwd: backendDir, stdio: "inherit" });
+      execSync(`${pythonCmd} -m venv venv`, {
+        cwd: backendDir,
+        stdio: "inherit",
+      });
       success("Virtual environment created");
     } catch (err) {
       error(
