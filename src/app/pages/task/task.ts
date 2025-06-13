@@ -102,41 +102,14 @@ export class TaskView {
       this.router.navigate(['/']); // Fallback to home if no category ID
     }
   }
-  getStatusText(status: number): string {
-    switch (status) {
-      case 1:
-        return 'To Do';
-      case 2:
-        return 'In Progress';
-      case 3:
-        return 'Done';
-      default:
-        return 'Unknown';
-    }
+
+  statusText(status: number): string {
+    return this.taskService.getStatusText(status);
   }
-  getStatusColor(status: number): string {
-    switch (status) {
-      case 1:
-        return '#facc15'; // amber – To Do
-      case 2:
-        return '#38bdf8'; // sky – In Progress
-      case 3:
-        return '#4ade80'; // green – Done
-      default:
-        return '#94a3b8'; // gray – Unknown
-    }
+  statusColor(status: number): string {
+    return this.taskService.getStatusColor(status);
   }
   formatDate(dateString: Date): string {
-    if (!dateString) return 'No due date';
-    try {
-      const options: Intl.DateTimeFormatOptions = {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      };
-      return new Date(dateString).toLocaleDateString(undefined, options);
-    } catch {
-      return 'Invalid date';
-    }
+    return this.taskService.formatDate(dateString);
   }
 }

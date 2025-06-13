@@ -2,8 +2,8 @@
     <div class="task-header">
         <h1 class="task-view-title">Task Details</h1>
         @if (task && category) {
-        <div class="task-badge" [style.background]="getStatusColor(task.status)">
-            {{ getStatusText(task.status) }}
+        <div class="task-badge" [style.background]="statusColor(task.status)">
+            {{ statusText(task.status) }}
         </div>
         }
     </div>

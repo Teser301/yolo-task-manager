@@ -13,15 +13,16 @@ export class TaskService {
     tasks: `${this.apiUrl}/tasks`,
     taskById: (id: number) => `${this.apiUrl}/tasks/${id}`
   };
+
   private tasksSubject = new BehaviorSubject<Task[]>([]);
   public tasks$ = this.tasksSubject.asObservable();
+
 
   constructor() {
     this.loadAllTasks();
   }
 
   private loadAllTasks(): void {
-
     this.http.get<Task[]>(this.endpoints.tasks).pipe(
       catchError(err => {
         console.error('Error loading tasks', err);
@@ -30,19 +31,19 @@ export class TaskService {
     ).subscribe(tasks => this.tasksSubject.next(tasks));
   }
 
-  getTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.endpoints.tasks).pipe(
-      tap(tasks => this.tasksSubject.next(tasks)),
-      catchError(err => {
-        console.error('Error fetching tasks', err);
-        return throwError(() => err);
-      })
-    );
-  }
+  // getTasks(): Observable<Task[]> {
+  //   return this.http.get<Task[]>(this.endpoints.tasks).pipe(
+  //     tap(tasks => this.tasksSubject.next(tasks)),
+  //     catchError(err => {
+  //       console.error('Error fetching tasks', err);
+  //       return throwError(() => err);
+  //     })
+  //   );
+  // }
 
-  getTaskById(id: number): Observable<Task> {
-    return this.http.get<Task>(this.endpoints.taskById(id));
-  }
+  // getTaskById(id: number): Observable<Task> {
+  //   return this.http.get<Task>(this.endpoints.taskById(id));
+  // }
 
   createNewTask(task: Task): Observable<Task> {
     return this.http.post<Task>(this.endpoints.tasks, task).pipe(
@@ -102,7 +103,6 @@ export class TaskService {
     const currentTasks = this.tasksSubject.value;
     this.tasksSubject.next(currentTasks.filter(t => t.category_id !== categoryId));
   }
-
 
   getStatusText(status: number): string {
     switch (status) {
