@@ -2,10 +2,10 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0 with a [FastAPI](https://fastapi.tiangolo.com/) backend.
 
-## Project Setup and Startup
+
 
 ## Quick Start (Recommended)
-To start both frontend and backend services with a single command:
+Added a small script to run both front-end and back-end with minimal input required.
 ```bash
 npm run run-project.js
 ```
