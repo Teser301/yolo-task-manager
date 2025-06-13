@@ -49,7 +49,7 @@ Run this to enter the virtual enviroment
 ```
 ### macOS/Linux
 ```bash
-.\venv\bin\activate
+source venv/bin/activate
 ```
 
 ## Finally, run the backend
