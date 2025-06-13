@@ -1,3 +1,5 @@
+@use "../../../sass/variables";
+
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -9,6 +11,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+
   .modal-box {
     background-color: #1f2937;
     border: 1px solid #374151;
@@ -16,8 +19,10 @@
     border-radius: 12px;
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     color: #f9fafb;
+    @media (max-width: variables.$screen-sm) {
+      width: 80%;
+    }
     .modal-actions {
       display: flex;
       justify-content: flex-end;
